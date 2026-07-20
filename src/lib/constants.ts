@@ -3,7 +3,9 @@ export const DEVELOPERS = ['Aslok Singh Rajput', 'Sandip Kumar', 'Bikash Kumar']
 export const SITE = {
   name: 'MyClientWork',
   tagline: 'Premium Source Code Marketplace for Developers',
-  email: 'hello@myclientwork.com',
+  email: 'gmail-myclientwork3@gmail.com',
+  phones: ['+977-9816210951', '+977-9811138552'],
+  address: 'Kathmandu, Nepal',
   social: {
     github: 'https://github.com',
     twitter: 'https://twitter.com',

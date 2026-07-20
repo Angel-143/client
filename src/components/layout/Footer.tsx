@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, MessageCircle, Mail } from 'lucide-react';
+import { Github, Twitter, Linkedin, MessageCircle, Mail, Phone } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { NAV_LINKS, SITE, DEVELOPERS } from '@/lib/constants';
 
@@ -109,6 +109,16 @@ export function Footer() {
                   <Mail size={14} /> {SITE.email}
                 </a>
               </li>
+              {SITE.phones.map((phone) => (
+                <li key={phone}>
+                  <a
+                    href={`tel:${phone}`}
+                    className="flex items-center gap-2 text-sm text-slate-600 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400"
+                  >
+                    <Phone size={14} /> {phone}
+                  </a>
+                </li>
+              ))}
               <li>
                 <Link
                   to="/contact"

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Mail, MapPin, MessageSquare, Send, Phone } from 'lucide-react';
+import { Mail, MapPin, Send, Phone } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 import { useCreateContactMessage } from '@/hooks/useData';
 import { SITE } from '@/lib/constants';
@@ -58,12 +58,12 @@ export default function Contact() {
           <div className="space-y-4">
             {[
               { icon: Mail, title: 'Email', value: SITE.email, href: `mailto:${SITE.email}` },
-              { icon: MessageSquare, title: 'Live chat', value: 'Mon–Fri, 9am–6pm IST' },
-              { icon: Phone, title: 'Phone', value: '+91 98765 43210' },
-              { icon: MapPin, title: 'Office', value: 'Bengaluru, Karnataka, India' },
-            ].map((c) => (
+              { icon: Phone, title: 'Phone', value: SITE.phones[0], href: `tel:${SITE.phones[0]}` },
+              { icon: Phone, title: 'Phone', value: SITE.phones[1], href: `tel:${SITE.phones[1]}` },
+              { icon: MapPin, title: 'Location', value: SITE.address },
+            ].map((c, i) => (
               <a
-                key={c.title}
+                key={i}
                 href={c.href ?? '#'}
                 className="card flex items-start gap-4 p-5 transition-colors hover:border-brand-300 dark:hover:border-brand-500/40"
               >
