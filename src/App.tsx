@@ -10,9 +10,7 @@ import { Protected, AdminProtected } from '@/components/layout/Protected';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Loader2 } from 'lucide-react';
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 1000 * 60, retry: 1, refetchOnWindowFocus: false } },
-});
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1000 * 60, retry: 1, refetchOnWindowFocus: false } } });
 
 const Home = lazy(() => import('@/pages/Home'));
 const Projects = lazy(() => import('@/pages/Projects'));
@@ -36,13 +34,7 @@ function withSuspense(element: React.ReactNode) {
 }
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
-  );
+  return <div className="flex min-h-screen flex-col"><Navbar /><main className="flex-1">{children}</main><Footer /></div>;
 }
 
 export default function App() {
@@ -56,21 +48,17 @@ export default function App() {
               <Route path="/login" element={withSuspense(<Login />)} />
               <Route path="/register" element={withSuspense(<Register />)} />
               <Route path="/forgot-password" element={withSuspense(<ForgotPassword />)} />
-
               <Route path="/" element={<PublicLayout>{withSuspense(<Home />)}</PublicLayout>} />
               <Route path="/projects" element={<PublicLayout>{withSuspense(<Projects />)}</PublicLayout>} />
               <Route path="/projects/:slug" element={<PublicLayout>{withSuspense(<ProjectDetails />)}</PublicLayout>} />
               <Route path="/about" element={<PublicLayout>{withSuspense(<About />)}</PublicLayout>} />
               <Route path="/jobs" element={<PublicLayout>{withSuspense(<Jobs />)}</PublicLayout>} />
               <Route path="/contact" element={<PublicLayout>{withSuspense(<Contact />)}</PublicLayout>} />
-
               <Route path="/dashboard" element={<Protected>{withSuspense(<Dashboard />)}</Protected>} />
-
               <Route path="/admin" element={<AdminProtected><AdminLayout>{withSuspense(<AdminDashboard />)}</AdminLayout></AdminProtected>} />
               <Route path="/admin/projects" element={<AdminProtected><AdminLayout>{withSuspense(<AdminProjects />)}</AdminLayout></AdminProtected>} />
               <Route path="/admin/jobs-team" element={<AdminProtected><AdminLayout>{withSuspense(<AdminJobsTeam />)}</AdminLayout></AdminProtected>} />
               <Route path="/admin/pages" element={<AdminProtected><AdminLayout>{withSuspense(<AdminPages />)}</AdminLayout></AdminProtected>} />
-
               <Route path="*" element={<PublicLayout>{withSuspense(<NotFound />)}</PublicLayout>} />
             </Routes>
             <Toaster position="top-right" toastOptions={{ className: '!bg-white !text-slate-900 dark:!bg-slate-900 dark:!text-white !rounded-xl !border !border-slate-200 dark:!border-slate-700 !shadow-card' }} />
