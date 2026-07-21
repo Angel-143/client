@@ -45,7 +45,7 @@ export function AdminUsers() {
                     {u.country_code && u.whatsapp_number ? `${u.country_code} ${u.whatsapp_number}` : '—'}
                   </td>
                   <td className="p-4">
-                    <Badge variant={u.role === 'admin' ? 'brand' : 'slate'}>{u.role}</Badge>
+                    <Badge variant={u.role === 'admin' ? 'brand' : 'neutral'}>{u.role}</Badge>
                   </td>
                   <td className="p-4 text-slate-500">{u.order_count ?? 0}</td>
                   <td className="p-4 font-semibold">{formatPrice(u.total_spend ?? 0)}</td>
@@ -77,7 +77,7 @@ export function AdminCategories() {
                 <p className="font-semibold">{c.name}</p>
                 <p className="text-xs text-slate-500">{c.slug}</p>
               </div>
-              <Badge variant="slate">{c.icon ?? 'Code2'}</Badge>
+              <Badge variant="neutral">{c.icon ?? 'Code2'}</Badge>
             </div>
           ))}
         </div>
@@ -194,7 +194,7 @@ export function AdminMessages() {
                   <p className="font-semibold">{m.name} <span className="text-xs font-normal text-slate-500">({m.email})</span></p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">{m.subject}</p>
                 </div>
-                <Badge variant={m.status === 'new' ? 'brand' : 'slate'}>{m.status}</Badge>
+                <Badge variant={m.status === 'new' ? 'brand' : 'neutral'}>{m.status}</Badge>
               </div>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{m.message}</p>
               <div className="mt-3 flex gap-2">

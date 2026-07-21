@@ -101,10 +101,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signInWithGoogle() {
-    const redirectTo = `${window.location.origin}/dashboard`;
+    const redirectTo = `${window.location.origin}/auth/callback`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo },
+      options: {
+        redirectTo,
+        queryParams: { access_type: 'offline', prompt: 'consent' },
+      },
     });
     return { error: error?.message ?? null };
   }

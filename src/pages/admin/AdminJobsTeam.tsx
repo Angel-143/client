@@ -75,7 +75,7 @@ export function AdminJobs() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h3 className="font-display font-bold">{job.title}</h3>
-                  <Badge variant={job.status === 'active' ? 'brand' : 'slate'}>{job.status}</Badge>
+                  <Badge variant={job.status === 'active' ? 'brand' : 'neutral'}>{job.status}</Badge>
                 </div>
                 <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                   {job.department && <span>{job.department}</span>}
@@ -273,7 +273,7 @@ export function AdminTeam() {
                 </div>
               )}
               <div className="mt-4 flex items-center justify-between">
-                <Badge variant={m.is_active ? 'brand' : 'slate'}>{m.is_active ? 'Visible' : 'Hidden'}</Badge>
+                <Badge variant={m.is_active ? 'brand' : 'neutral'}>{m.is_active ? 'Visible' : 'Hidden'}</Badge>
                 <div className="flex gap-1">
                   <button onClick={() => { setEditing(m); setShowForm(true); }} className="btn-ghost p-2"><Pencil size={14} /></button>
                   <button onClick={() => toggleActive(m)} className="btn-ghost p-2 text-xs">{m.is_active ? 'Hide' : 'Show'}</button>
@@ -464,7 +464,7 @@ export function AdminProjectsWithForm() {
                   <td className="p-4 text-slate-500">{p.category?.name ?? '—'}</td>
                   <td className="p-4 font-semibold">${p.price}</td>
                   <td className="p-4 text-slate-500">{p.sales_count}</td>
-                  <td className="p-4">{p.is_featured ? <Badge variant="brand">Yes</Badge> : <Badge variant="slate">No</Badge>}</td>
+                  <td className="p-4">{p.is_featured ? <Badge variant="brand">Yes</Badge> : <Badge variant="neutral">No</Badge>}</td>
                   <td className="p-4">
                     <div className="flex gap-1">
                       <button onClick={() => { setEditing(p); setShowForm(true); }} className="btn-ghost p-2"><Pencil size={15} /></button>

@@ -31,6 +31,7 @@ const Contact = lazy(() => import('@/pages/Contact'));
 const Login = lazy(() => import('@/pages/Login'));
 const Register = lazy(() => import('@/pages/Register'));
 const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
+const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const Dashboard = lazy(() => import('@/pages/dashboard/Dashboard'));
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
       { path: 'login', element: withSuspense(<GuestOnly><Login /></GuestOnly>) },
       { path: 'register', element: withSuspense(<GuestOnly><Register /></GuestOnly>) },
       { path: 'forgot-password', element: withSuspense(<ForgotPassword />) },
+      { path: 'auth/callback', element: withSuspense(<AuthCallback />) },
       {
         path: 'dashboard',
         element: withSuspense(<Protected><DashboardLayout /></Protected>),
