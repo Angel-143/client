@@ -9,11 +9,7 @@ export default function NotFound() {
         <p className="text-8xl font-bold bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">404</p>
         <h1 className="mt-4 text-2xl font-bold text-gray-900 dark:text-white">Page not found</h1>
         <p className="mt-2 text-gray-500 dark:text-gray-400">The page you're looking for doesn't exist.</p>
-        <Link to="/" className="mt-6 inline-block">
-          <Button>
-            <Home size={16} /> Back to Home
-          </Button>
-        </Link>
+        <Link to="/" className="mt-6 inline-block"><Button><Home size={16} /> Back to Home</Button></Link>
       </div>
     </div>
   )

@@ -6,9 +6,7 @@ export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950">
       <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
+      <main className="flex-1"><Outlet /></main>
       <Footer />
     </div>
   )

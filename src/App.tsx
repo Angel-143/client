@@ -22,19 +22,9 @@ const AdminProjects = lazy(() => import('./pages/admin/AdminProjects'))
 const AdminJobsTeam = lazy(() => import('./pages/admin/AdminJobsTeam'))
 const AdminPages = lazy(() => import('./pages/admin/AdminPages'))
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { staleTime: 1000 * 60, refetchOnWindowFocus: false },
-  },
-})
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1000 * 60, refetchOnWindowFocus: false } } })
 
-function PageLoader() {
-  return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Spinner size={32} />
-    </div>
-  )
-}
+function PageLoader() { return <div className="flex items-center justify-center min-h-[60vh]"><Spinner size={32} /></div> }
 
 export default function App() {
   return (
@@ -51,35 +41,19 @@ export default function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                 </Route>
-
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminProtected>
-                      <AdminLayout />
-                    </AdminProtected>
-                  }
-                >
+                <Route path="/admin" element={<AdminProtected><AdminLayout /></AdminProtected>}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="projects" element={<AdminProjects />} />
                   <Route path="jobs-team" element={<AdminJobsTeam />} />
                   <Route path="pages" element={<AdminPages />} />
                 </Route>
-
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </BrowserRouter>
-          <Toaster position="bottom-right" toastOptions={{
-            style: {
-              borderRadius: '12px',
-              background: '#1f2937',
-              color: '#fff',
-            },
-          }} />
+          <Toaster position="bottom-right" toastOptions={{ style: { borderRadius: '12px', background: '#1f2937', color: '#fff' } }} />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
