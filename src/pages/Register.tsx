@@ -15,10 +15,7 @@ const schema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 type FormData = z.infer<typeof schema>;
-
-const passwordChecks = [
-  { label: 'At least 6 characters', test: (p: string) => p.length >= 6 },
-];
+const passwordChecks = [{ label: 'At least 6 characters', test: (p: string) => p.length >= 6 }];
 
 export default function Register() {
   const { signUp, signInWithGoogle } = useAuth();
@@ -29,8 +26,7 @@ export default function Register() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: zodResolver(schema), mode: 'onBlur' });
 
   async function handleGoogle() {
-    setGoogleLoading(true);
-    toast.loading('Redirecting to Google…', { id: 'google' });
+    setGoogleLoading(true); toast.loading('Redirecting to Google…', { id: 'google' });
     const { error } = await signInWithGoogle();
     if (error) { toast.error(error, { id: 'google' }); setGoogleLoading(false); }
   }
@@ -38,8 +34,7 @@ export default function Register() {
   async function onSubmit(data: FormData) {
     const { error } = await signUp(data.email, data.password, data.full_name);
     if (error) { toast.error(error); return; }
-    toast.success('Account created! Welcome to MyClientWork.');
-    navigate('/dashboard');
+    toast.success('Account created! Welcome to MyClientWork.'); navigate('/dashboard');
   }
 
   return (
@@ -50,7 +45,6 @@ export default function Register() {
         <div className="card p-8">
           <h1 className="font-display text-2xl font-bold text-center">Create your account</h1>
           <p className="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">Join thousands of developers</p>
-
           <div className="mt-6 space-y-4">
             <button type="button" onClick={handleGoogle} disabled={googleLoading} className="btn-secondary w-full">
               {googleLoading ? <Loader2 size={16} className="animate-spin" /> : (
@@ -63,61 +57,15 @@ export default function Register() {
               )}
               {googleLoading ? 'Redirecting…' : 'Sign up with Google'}
             </button>
-
-            <div className="relative flex items-center gap-3">
-              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-              <span className="text-xs font-medium text-slate-400">or</span>
-              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-            </div>
-
+            <div className="relative flex items-center gap-3"><div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" /><span className="text-xs font-medium text-slate-400">or</span><div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" /></div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div>
-                <label className="label" htmlFor="full_name">Full Name</label>
-                <div className="relative">
-                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input id="full_name" className="input pl-10" placeholder="John Doe" {...register('full_name')} />
-                </div>
-                {errors.full_name && <p className="mt-1 text-xs text-error-600">{errors.full_name.message}</p>}
-              </div>
-              <div>
-                <label className="label" htmlFor="email">Email</label>
-                <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input id="email" type="email" className="input pl-10" placeholder="you@example.com" {...register('email')} />
-                </div>
-                {errors.email && <p className="mt-1 text-xs text-error-600">{errors.email.message}</p>}
-              </div>
-              <div>
-                <label className="label" htmlFor="password">Password</label>
-                <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input id="password" type={showPassword ? 'text' : 'password'} className="input pl-10 pr-10" placeholder="••••••••" {...register('password')} onChange={(e) => { setPassword(e.target.value); }} />
-                  <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                {errors.password && <p className="mt-1 text-xs text-error-600">{errors.password.message}</p>}
-                {password && (
-                  <div className="mt-2 space-y-1">
-                    {passwordChecks.map((c) => (
-                      <div key={c.label} className="flex items-center gap-1.5 text-xs">
-                        <Check size={12} className={c.test(password) ? 'text-success-500' : 'text-slate-300 dark:text-slate-600'} />
-                        <span className={c.test(password) ? 'text-success-600 dark:text-success-500' : 'text-slate-400'}>{c.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-3">
-                {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <UserPlus size={18} />}
-                {isSubmitting ? 'Creating account...' : 'Create Account'}
-              </button>
+              <div><label className="label" htmlFor="full_name">Full Name</label><div className="relative"><User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input id="full_name" className="input pl-10" placeholder="John Doe" {...register('full_name')} /></div>{errors.full_name && <p className="mt-1 text-xs text-error-600">{errors.full_name.message}</p>}</div>
+              <div><label className="label" htmlFor="email">Email</label><div className="relative"><Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input id="email" type="email" className="input pl-10" placeholder="you@example.com" {...register('email')} /></div>{errors.email && <p className="mt-1 text-xs text-error-600">{errors.email.message}</p>}</div>
+              <div><label className="label" htmlFor="password">Password</label><div className="relative"><Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input id="password" type={showPassword ? 'text' : 'password'} className="input pl-10 pr-10" placeholder="••••••••" {...register('password')} onChange={(e) => setPassword(e.target.value)} /><button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div>{errors.password && <p className="mt-1 text-xs text-error-600">{errors.password.message}</p>}{password && (<div className="mt-2 space-y-1">{passwordChecks.map((c) => <div key={c.label} className="flex items-center gap-1.5 text-xs"><Check size={12} className={c.test(password) ? 'text-success-500' : 'text-slate-300 dark:text-slate-600'} /><span className={c.test(password) ? 'text-success-600 dark:text-success-500' : 'text-slate-400'}>{c.label}</span></div>)}</div>)}</div>
+              <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-3">{isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <UserPlus size={18} />}{isSubmitting ? 'Creating account...' : 'Create Account'}</button>
             </form>
           </div>
-
-          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-            Already have an account? <Link to="/login" className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Login</Link>
-          </p>
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">Already have an account? <Link to="/login" className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Login</Link></p>
         </div>
       </div>
     </div>

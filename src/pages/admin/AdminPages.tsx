@@ -37,19 +37,13 @@ export default function AdminPages() {
         <h1 className="font-display text-2xl font-bold tracking-tight">Messages</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Contact form submissions.</p>
       </div>
-
-      {isLoading ? (
-        <Skeleton className="h-96 w-full rounded-2xl" />
-      ) : messages && messages.length > 0 ? (
+      {isLoading ? <Skeleton className="h-96 w-full rounded-2xl" /> : messages && messages.length > 0 ? (
         <div className="space-y-3">
           {messages.map((m) => (
             <div key={m.id} className="card p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-slate-900 dark:text-white">{m.name}</p>
-                    <Badge variant={m.status === 'new' ? 'brand' : 'neutral'}>{m.status}</Badge>
-                  </div>
+                  <div className="flex items-center gap-2"><p className="font-semibold text-slate-900 dark:text-white">{m.name}</p><Badge variant={m.status === 'new' ? 'brand' : 'neutral'}>{m.status}</Badge></div>
                   <p className="text-xs text-slate-500">{m.email}</p>
                   <p className="mt-2 text-sm font-medium text-slate-700 dark:text-slate-300">{m.subject}</p>
                   <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{m.message}</p>
@@ -64,10 +58,7 @@ export default function AdminPages() {
           ))}
         </div>
       ) : (
-        <div className="card flex flex-col items-center gap-3 p-12 text-center">
-          <Mail size={32} className="text-slate-300" />
-          <p className="text-sm text-slate-400">No messages yet.</p>
-        </div>
+        <div className="card flex flex-col items-center gap-3 p-12 text-center"><Mail size={32} className="text-slate-300" /><p className="text-sm text-slate-400">No messages yet.</p></div>
       )}
     </div>
   );
