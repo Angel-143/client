@@ -1,61 +1,126 @@
-import { useState, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { useProjects, useCategories } from '@/hooks/useProjects';
-import { ProjectCard } from '@/components/projects/ProjectCard';
-import { ProjectCardSkeleton, EmptyState } from '@/components/ui/Skeleton';
-import { cn } from '@/lib/constants';
-
-const sortOptions = [
-  { value: 'newest', label: 'Newest' }, { value: 'popular', label: 'Most Popular' }, { value: 'rating', label: 'Top Rated' }, { value: 'price-low', label: 'Price: Low to High' }, { value: 'price-high', label: 'Price: High to Low' },
-] as const;
-
-const difficulties = ['Beginner', 'Intermediate', 'Advanced', 'Expert'] as const;
+import { useState, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Search, SlidersHorizontal } from 'lucide-react'
+import { useProjects, useCategories } from '../hooks/useQueries'
+import ProjectCard from '../components/projects/ProjectCard'
+import Input from '../components/ui/Input'
+import Badge from '../components/ui/Badge'
+import Spinner from '../components/ui/Spinner'
+import { cn } from '../lib/constants'
 
 export default function Projects() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<typeof sortOptions[number]['value']>('newest');
-  const [difficulty, setDifficulty] = useState<string>('all');
-  const categoryId = searchParams.get('category') ?? 'all';
-  const { data: categories } = useCategories();
-  const { data: projects, isLoading } = useProjects({ category: categoryId, search, difficulty, sort });
+  const { data: projects, isLoading } = useProjects()
+  const { data: categories } = useCategories()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [search, setSearch] = useState('')
 
-  const activeCategory = useMemo(() => categories?.find((c) => c.id === categoryId), [categories, categoryId]);
+  const activeCategory = searchParams.get('category') || 'all'
+  const [sortBy, setSortBy] = useState('newest')
 
-  function setCategory(id: string) { if (id === 'all') searchParams.delete('category'); else searchParams.set('category', id); setSearchParams(searchParams); }
-  const hasFilters = categoryId !== 'all' || difficulty !== 'all' || search !== '';
+  const filtered = useMemo(() => {
+    if (!projects) return []
+    let result = [...projects]
+    if (activeCategory !== 'all') {
+      const cat = categories?.find((c) => c.slug === activeCategory)
+      if (cat) result = result.filter((p) => p.category_id === cat.id)
+    }
+    if (search) {
+      const q = search.toLowerCase()
+      result = result.filter(
+        (p) => p.title.toLowerCase().includes(q) || p.short_description?.toLowerCase().includes(q)
+      )
+    }
+    if (sortBy === 'popular') result.sort((a, b) => b.sales_count - a.sales_count)
+    else if (sortBy === 'rating') result.sort((a, b) => b.rating - a.rating)
+    else if (sortBy === 'price-low') result.sort((a, b) => a.price - b.price)
+    else if (sortBy === 'price-high') result.sort((a, b) => b.price - a.price)
+    return result
+  }, [projects, activeCategory, search, sortBy, categories])
+
+  const setCategory = (slug: string) => {
+    if (slug === 'all') setSearchParams({})
+    else setSearchParams({ category: slug })
+  }
 
   return (
-    <div className="container-page py-10 sm:py-12">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Marketplace</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Browse {projects?.length ?? 0} premium, production-ready projects.</p>
+    <div className="min-h-screen py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <Badge color="brand" className="mb-3">Marketplace</Badge>
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">All Projects</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">Browse our collection of premium source code</p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-4 mb-8">
+          <div className="flex-1">
+            <Input
+              placeholder="Search projects..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="!pl-10"
+            />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal size={16} className="text-gray-400" />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            >
+              <option value="newest">Newest</option>
+              <option value="popular">Most Popular</option>
+              <option value="rating">Highest Rated</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2 mb-8">
+          <button
+            onClick={() => setCategory('all')}
+            className={cn(
+              'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
+              activeCategory === 'all'
+                ? 'bg-brand-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+            )}
+          >
+            All
+          </button>
+          {categories?.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setCategory(cat.slug)}
+              className={cn(
+                'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
+                activeCategory === cat.slug
+                  ? 'bg-brand-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              )}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Spinner size={32} />
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-500 dark:text-gray-400">No projects found. Try a different search.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} />
+            ))}
+          </div>
+        )}
       </div>
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input type="text" placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="input pl-11" />
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2"><SlidersHorizontal size={16} className="text-slate-400" /><select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className="input cursor-pointer py-2 text-sm">{sortOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</select></div>
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="input cursor-pointer py-2 text-sm"><option value="all">All Levels</option>{difficulties.map((d) => <option key={d} value={d}>{d}</option>)}</select>
-        </div>
-      </div>
-      {categories && categories.length > 0 && (
-        <div className="mb-8 flex flex-wrap gap-2">
-          <button onClick={() => setCategory('all')} className={cn('rounded-full px-4 py-1.5 text-sm font-medium transition-all', categoryId === 'all' ? 'bg-brand-600 text-white shadow-glow' : 'border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800')}>All</button>
-          {categories.map((c) => <button key={c.id} onClick={() => setCategory(c.id)} className={cn('rounded-full px-4 py-1.5 text-sm font-medium transition-all', categoryId === c.id ? 'bg-brand-600 text-white shadow-glow' : 'border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800')}>{c.name}</button>)}
-        </div>
-      )}
-      {hasFilters && <button onClick={() => { setCategory('all'); setDifficulty('all'); setSearch(''); }} className="mb-4 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-error-600"><X size={14} /> Clear filters</button>}
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <ProjectCardSkeleton key={i} />)}</div>
-      ) : projects && projects.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">{projects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}</div>
-      ) : (
-        <EmptyState icon={Search} title="No projects found" description={activeCategory ? `No projects in ${activeCategory.name} match your filters.` : 'Try adjusting your search or filters.'} />
-      )}
     </div>
-  );
+  )
 }

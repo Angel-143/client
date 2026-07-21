@@ -1,44 +1,95 @@
-import { type ReactNode } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, Briefcase, FileText, ArrowLeft } from 'lucide-react';
-import { Logo } from '@/components/ui/Logo';
-import { cn } from '@/lib/constants';
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import { LayoutDashboard, FolderKanban, Briefcase, FileText, Home } from 'lucide-react'
+import { motion } from 'framer-motion'
+import Logo from '../ui/Logo'
+import { useAuth } from '../../context/AuthContext'
+import { cn } from '../../lib/constants'
 
 const adminLinks = [
-  { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
-  { to: '/admin/projects', label: 'Projects', icon: FolderKanban },
-  { to: '/admin/jobs-team', label: 'Jobs & Team', icon: Briefcase },
-  { to: '/admin/pages', label: 'Pages & Messages', icon: FileText },
-];
+  { href: '/admin', label: 'Overview', icon: LayoutDashboard },
+  { href: '/admin/projects', label: 'Projects', icon: FolderKanban },
+  { href: '/admin/jobs-team', label: 'Jobs & Team', icon: Briefcase },
+  { href: '/admin/pages', label: 'Pages & Messages', icon: FileText },
+]
 
-export function AdminLayout({ children }: { children?: ReactNode }) {
+export default function AdminLayout() {
+  const location = useLocation()
+  const { profile, signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+    window.location.href = '/'
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:px-8">
-        <aside className="hidden w-64 shrink-0 lg:block">
-          <div className="sticky top-6 space-y-6">
-            <Logo />
-            <nav className="space-y-1">
-              {adminLinks.map((link) => (
-                <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => cn('flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-brand-600 text-white shadow-glow' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800')}>
-                  <link.icon size={18} /> {link.label}
-                </NavLink>
-              ))}
-            </nav>
-            <Link to="/" className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400"><ArrowLeft size={16} /> Back to site</Link>
-          </div>
-        </aside>
-        <main className="min-w-0 flex-1">{children ?? <Outlet />}</main>
-      </div>
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-900 lg:hidden">
-        <div className="flex items-center justify-around">
-          {adminLinks.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => cn('flex flex-col items-center gap-1 rounded-lg px-3 py-1.5 text-[10px] font-medium', isActive ? 'text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-slate-400')}>
-              <link.icon size={18} /> {link.label.split(' ')[0]}
-            </NavLink>
-          ))}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
+      <aside className="hidden md:flex w-64 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div className="p-5 border-b border-gray-200 dark:border-gray-800">
+          <Logo />
         </div>
+        <nav className="flex-1 p-4 space-y-1">
+          {adminLinks.map((link) => {
+            const active = location.pathname === link.href
+            const Icon = link.icon
+            return (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={cn(
+                  'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors relative',
+                  active
+                    ? 'text-brand-600 dark:text-brand-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                )}
+              >
+                {active && (
+                  <motion.div
+                    layoutId="adminNav"
+                    className="absolute inset-0 bg-brand-50 dark:bg-brand-900/30 rounded-xl -z-10"
+                  />
+                )}
+                <Icon size={18} />
+                {link.label}
+              </Link>
+            )
+          })}
+        </nav>
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <Link to="/" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl">
+            <Home size={16} /> Back to Site
+          </Link>
+          <button onClick={handleSignOut} className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl w-full mt-1">
+            Sign Out
+          </button>
+          <div className="mt-3 px-4 text-xs text-gray-400">
+            Signed in as {profile?.full_name || profile?.email}
+          </div>
+        </div>
+      </aside>
+
+      <div className="flex-1 flex flex-col">
+        <header className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex items-center justify-between">
+          <Logo />
+          <Link to="/" className="text-sm text-gray-500 flex items-center gap-1">
+            <Home size={16} /> Exit
+          </Link>
+        </header>
+        <main className="flex-1 p-4 md:p-8 overflow-auto">
+          <Outlet />
+        </main>
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around py-2 z-50">
+          {adminLinks.map((link) => {
+            const active = location.pathname === link.href
+            const Icon = link.icon
+            return (
+              <Link key={link.href} to={link.href} className={cn('flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg', active ? 'text-brand-600 dark:text-brand-400' : 'text-gray-500')}>
+                <Icon size={20} />
+                <span className="text-[10px]">{link.label.split(' ')[0]}</span>
+              </Link>
+            )
+          })}
+        </nav>
       </div>
     </div>
-  );
+  )
 }

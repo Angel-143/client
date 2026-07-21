@@ -1,49 +1,53 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
-
-export const NAV_LINKS = [
-  { label: 'Home', to: '/' },
-  { label: 'Projects', to: '/projects' },
-  { label: 'About', to: '/about' },
-  { label: 'Jobs', to: '/jobs' },
-  { label: 'Contact', to: '/contact' },
-] as const;
 
 export const SITE = {
   name: 'MyClientWork',
   tagline: 'Premium Source Code Marketplace',
-  description: 'A curated marketplace of production-ready source code for developers.',
-  email: 'support@myclientwork.dev',
-  phone: '+91 98765 43210',
-  address: 'Bhubaneswar, Odisha, India',
-  social: {
-    github: 'https://github.com/myclientwork',
-    twitter: 'https://twitter.com/myclientwork',
-    linkedin: 'https://linkedin.com/company/myclientwork',
-  },
-};
+  email: 'myclientwork3@gmail.com',
+  location: 'Birgunj, Nepal',
+  url: 'https://myclientwork.dev',
+}
 
-export function formatPrice(price: number | string): string {
-  const n = typeof price === 'string' ? parseFloat(price) : price;
-  return `$${n.toFixed(0)}`;
+export const NAV_LINKS = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+]
+
+export function formatPrice(amount: number): string {
+  if (amount === 0) return 'Free'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+  }).format(amount)
 }
 
 export function formatNumber(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
-  return `${n}`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`
+  return n.toString()
 }
 
-export function formatDate(date: string | Date): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+export function formatDate(date: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(date))
 }
 
-export function formatDateTime(date: string | Date): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+export function formatDateTime(date: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(date))
 }

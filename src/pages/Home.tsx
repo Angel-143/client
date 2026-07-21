@@ -1,136 +1,245 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ShieldCheck, Zap, Code2, Headphones, RefreshCw, Sparkles, Star, TrendingUp } from 'lucide-react';
-import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
-import { useFeaturedProjects, useCategories } from '@/hooks/useProjects';
-import { ProjectCard } from '@/components/projects/ProjectCard';
-import { ProjectCardSkeleton } from '@/components/ui/Skeleton';
-import { formatNumber } from '@/lib/constants';
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { ArrowRight, Download, RefreshCw, Code2, Zap, Shield, Sparkles, Star, TrendingUp, Package } from 'lucide-react'
+import Button from '../components/ui/Button'
+import Badge from '../components/ui/Badge'
+import ProjectCard from '../components/projects/ProjectCard'
+import { useFeaturedProjects, useCategories } from '../hooks/useQueries'
 
-const whyChooseUs = [
-  { icon: ShieldCheck, title: 'Verified & Secure', description: 'Every project is reviewed for code quality, security, and best practices before listing.' },
-  { icon: Zap, title: 'Instant Download', description: 'Get full source code immediately after purchase — no waiting, no friction.' },
-  { icon: Code2, title: 'Production-Ready', description: 'Clean, typed, documented codebases you can deploy or extend on day one.' },
-  { icon: RefreshCw, title: 'Free Updates', description: 'Receive future updates and improvements to every project you buy — for life.' },
-  { icon: Headphones, title: 'Developer Support', description: 'Direct access to the original authors for questions and customization help.' },
-  { icon: Sparkles, title: 'Premium Quality', description: 'Hand-picked, beautifully designed projects that stand out from the crowd.' },
-];
+
+const stats = [
+  { label: 'Projects', value: '50+', icon: Package },
+  { label: 'Downloads', value: '12K+', icon: Download },
+  { label: 'Avg Rating', value: '4.9', icon: Star },
+  { label: 'Developers', value: '3.2K', icon: TrendingUp },
+]
+
+const features = [
+  { icon: Zap, title: 'Instant Download', desc: 'Get immediate access to source code after purchase. No waiting required.' },
+  { icon: RefreshCw, title: 'Lifetime Updates', desc: 'Every project includes free lifetime updates. Always get the latest features.' },
+  { icon: Shield, title: 'Production Ready', desc: 'Clean, tested, and documented code ready to deploy to production.' },
+  { icon: Code2, title: 'Well Documented', desc: 'Comprehensive README and setup guides included with every project.' },
+]
+
+const techStack = ['React', 'TypeScript', 'Next.js', 'Node.js', 'Tailwind', 'Supabase', 'PostgreSQL', 'Vite']
 
 export default function Home() {
-  const { data: projects, isLoading } = useFeaturedProjects(6);
-  const { data: categories } = useCategories();
-  const totalProjects = 11;
-  const totalSales = projects?.reduce((sum, p) => sum + p.sales_count, 0) ?? 2400;
+  const { data: featuredProjects } = useFeaturedProjects()
+  const { data: categories } = useCategories()
 
   return (
-    <>
-      <section className="relative overflow-hidden">
-        <AnimatedBackground variant="hero" />
-        <div className="container-page pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-28">
-          <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-            <div className="lg:col-span-7 lg:pt-6">
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="group inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1.5 text-xs font-medium text-slate-700 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300">
-                <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success-500 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success-500" /></span>
-                Premium source code marketplace
-                <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">NEW</span>
-              </motion.div>
-              <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="mt-6 max-w-3xl font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-balance sm:text-5xl lg:text-6xl">
-                Ship faster with <span className="heading-gradient">production-ready projects</span> — not boilerplate.
-              </motion.h1>
-              <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="mt-6 max-w-xl text-lg text-slate-600 dark:text-slate-300 text-balance">
-                MyClientWork is a curated marketplace of premium source code for developers. Buy full-stack apps, dashboards, templates, and AI tools — deploy in minutes, not months.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="mt-8 flex flex-col items-start gap-3 sm:flex-row">
-                <Link to="/projects" className="btn-primary group px-6 py-3 text-base">Browse Projects <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" /></Link>
-                <Link to="/about" className="btn-secondary group px-6 py-3 text-base">Learn more <ArrowUpRight size={16} className="text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-brand-600" /></Link>
-              </motion.div>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.25 }} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
-                <span className="flex items-center gap-1.5"><ShieldCheck size={15} className="text-success-500" /> Secure checkout</span>
-                <span className="flex items-center gap-1.5"><Zap size={15} className="text-accent-500" /> Instant access</span>
-                <span className="flex items-center gap-1.5"><RefreshCw size={15} className="text-warning-500" /> Lifetime updates</span>
-              </motion.div>
-            </div>
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="relative lg:col-span-5 lg:pt-2">
-              <div className="relative">
-                <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-brand-500/20 via-violet-500/10 to-accent-500/20 blur-2xl" />
-                <div className="relative rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-card backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-900/80">
-                  <div className="mb-4 flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-error-500/80" /><span className="h-2.5 w-2.5 rounded-full bg-warning-500/80" /><span className="h-2.5 w-2.5 rounded-full bg-success-500/80" />
-                    <span className="ml-3 inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400"><Code2 size={10} /> myclientwork.dev</span>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      { name: 'AI SaaS Starter', tag: 'AI & ML', price: '$49', color: 'from-brand-500 to-violet-500' },
-                      { name: 'Stripe Dashboard', tag: 'Dashboards', price: '$39', color: 'from-accent-500 to-brand-500' },
-                      { name: 'Notion Clone', tag: 'Web Apps', price: '$59', color: 'from-violet-500 to-accent-500' },
-                    ].map((row, i) => (
-                      <motion.div key={row.name} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + i * 0.12 }} className="group flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3 transition-colors hover:border-brand-200 hover:bg-white dark:border-slate-800 dark:bg-slate-800/40 dark:hover:bg-slate-800">
-                        <div className={`h-9 w-9 rounded-lg bg-gradient-to-br ${row.color} shadow-md`} />
-                        <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{row.name}</p><p className="truncate text-xs text-slate-500 dark:text-slate-400">{row.tag}</p></div>
-                        <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{row.price}</span>
-                      </motion.div>
+    <div>
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/50 via-white to-white dark:from-brand-950/20 dark:via-gray-950 dark:to-gray-950">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-200/30 dark:bg-brand-900/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-200/20 dark:bg-blue-900/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Badge color="brand" className="mb-5 px-3 py-1">
+                <Sparkles size={12} /> Premium Source Code Marketplace
+              </Badge>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white leading-[1.1]">
+                Ship faster with{' '}
+                <span className="bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">
+                  production-ready
+                </span>{' '}
+                code
+              </h1>
+              <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed">
+                Buy premium, battle-tested source code projects. React, Next.js, Node.js and more — with instant download and lifetime updates.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <Link to="/projects">
+                  <Button size="lg" className="w-full sm:w-auto">
+                    Browse Projects <ArrowRight size={18} />
+                  </Button>
+                </Link>
+                <Link to="/about">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="mt-10 flex items-center gap-4 flex-wrap">
+                <div className="flex -space-x-2">
+                  {['A', 'B', 'S', 'R', 'K'].map((letter, i) => (
+                    <div
+                      key={i}
+                      className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-950 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-xs font-bold"
+                    >
+                      {letter}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-sm">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} size={14} className="fill-amber-400 text-amber-400" />
                     ))}
                   </div>
-                  <div className="mt-4 flex items-center justify-between rounded-xl bg-gradient-to-r from-brand-600 to-violet-600 px-4 py-2.5 text-white">
-                    <div className="flex items-center gap-1.5"><Star size={14} className="fill-white text-white" /><span className="text-sm font-bold">4.8</span><span className="text-xs text-white/80">/ 5 · {formatNumber(totalSales)}+ sales</span></div>
-                    <TrendingUp size={16} />
+                  <p className="text-gray-500 dark:text-gray-400 mt-0.5">Trusted by 3,200+ developers</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative"
+            >
+              <div className="relative rounded-2xl bg-gray-900 dark:bg-black shadow-2xl overflow-hidden border border-gray-800">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-800 bg-gray-900/50">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  <span className="text-xs text-gray-500 ml-2 font-mono">myclientwork — terminal</span>
+                </div>
+                <div className="p-6 font-mono text-sm">
+                  <div className="space-y-2">
+                    <div className="flex gap-3">
+                      <span className="text-green-400">$</span>
+                      <span className="text-gray-300">npm install myclientwork</span>
+                    </div>
+                    <div className="text-gray-600 text-xs">added 247 packages in 3.2s</div>
+                    <div className="flex gap-3 pt-2">
+                      <span className="text-green-400">$</span>
+                      <span className="text-gray-300">npm run dev</span>
+                    </div>
+                    <div className="text-blue-400 text-xs pt-1">
+                      ▸ VITE v6.0 ready in 210 ms
+                    </div>
+                    <div className="text-blue-400 text-xs">
+                      ▸ ➜ Local: http://localhost:5173/
+                    </div>
+                    <div className="text-green-400 text-xs pt-2">✓ Build successful</div>
+                    <div className="flex gap-3 pt-2">
+                      <span className="text-green-400">$</span>
+                      <span className="text-gray-300">deploy --production</span>
+                    </div>
+                    <motion.div
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      className="w-2 h-4 bg-green-400 inline-block ml-3"
+                    />
                   </div>
                 </div>
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }} className="absolute -right-4 -top-4 hidden rounded-xl border border-slate-200 bg-white p-3 shadow-card dark:border-slate-800 dark:bg-slate-900 sm:block">
-                  <div className="flex items-center gap-2"><Zap size={14} className="text-accent-500" /><span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Instant download</span></div>
-                </motion.div>
-                <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }} className="absolute -bottom-4 -left-4 hidden rounded-xl border border-slate-200 bg-white p-3 shadow-card dark:border-slate-800 dark:bg-slate-900 sm:block">
-                  <div className="flex items-center gap-2"><RefreshCw size={14} className="text-warning-500" /><span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Lifetime updates</span></div>
-                </motion.div>
               </div>
+
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute -top-4 -right-4 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-3 flex items-center gap-2"
+              >
+                <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                  <Download size={16} className="text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-gray-900 dark:text-white">Instant download</p>
+                  <p className="text-[10px] text-gray-500">After purchase</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-3 flex items-center gap-2"
+              >
+                <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                  <RefreshCw size={16} className="text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-gray-900 dark:text-white">Lifetime updates</p>
+                  <p className="text-[10px] text-gray-500">Always current</p>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-slate-200/70 bg-white/60 dark:border-slate-800/70 dark:bg-slate-900/40">
-        <div className="container-page py-12">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-            {[{ label: 'Projects', value: `${totalProjects}+` }, { label: 'Downloads', value: `${formatNumber(totalSales)}+` }, { label: 'Developers', value: '8,500+' }, { label: 'Avg. Rating', value: '4.8★' }].map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.06 }} className="text-center">
-                <p className="font-display text-3xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400 sm:text-4xl">{s.value}</p>
-                <p className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">{s.label}</p>
-              </motion.div>
-            ))}
+      <section className="py-16 border-y border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat, i) => {
+              const Icon = stat.icon
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="text-center"
+                >
+                  <div className="inline-flex w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-900/30 items-center justify-center mb-3">
+                    <Icon size={20} className="text-brand-600 dark:text-brand-400" />
+                  </div>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{stat.label}</p>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container-page">
-          <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-            <div className="max-w-xl">
-              <p className="overline mb-2">Featured</p>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Trending projects</h2>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">Hand-picked, high-quality codebases our community is loving right now.</p>
+      {featuredProjects && featuredProjects.length > 0 && (
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <Badge color="amber" className="mb-3">Featured</Badge>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Popular Projects</h2>
+                <p className="text-gray-500 dark:text-gray-400 mt-2">Most loved by the community</p>
+              </div>
+              <Link to="/projects" className="hidden sm:flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400 hover:gap-2 transition-all">
+                View all <ArrowRight size={16} />
+              </Link>
             </div>
-            <Link to="/projects" className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">View all <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" /></Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredProjects.map((project, i) => (
+                <ProjectCard key={project.id} project={project} index={i} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {isLoading ? Array.from({ length: 6 }).map((_, i) => <ProjectCardSkeleton key={i} />) : projects?.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {categories && categories.length > 0 && (
-        <section className="section bg-white dark:bg-slate-900/40">
-          <div className="container-page">
-            <div className="mx-auto mb-12 max-w-2xl text-center">
-              <p className="overline mb-2">Browse</p>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Explore by category</h2>
-              <p className="mt-3 text-slate-600 dark:text-slate-400">Find the perfect project across our curated categories.</p>
+        <section className="py-20 bg-gray-50/50 dark:bg-gray-900/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge color="brand" className="mb-3">Categories</Badge>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Browse by Category</h2>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {categories.map((c, i) => (
-                <motion.div key={c.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.05 }}>
-                  <Link to={`/projects?category=${c.id}`} className="card-hover group flex flex-col items-center gap-3 p-5 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400"><Code2 size={22} /></div>
-                    <span className="text-sm font-semibold text-slate-900 dark:text-white">{c.name}</span>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((cat, i) => (
+                <motion.div
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <Link
+                    to={`/projects?category=${cat.slug}`}
+                    className="block p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-brand-500 hover:shadow-lg transition-all text-center group"
+                  >
+                    <div className="text-2xl mb-2">{cat.icon || '📦'}</div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                      {cat.name}
+                    </p>
                   </Link>
                 </motion.div>
               ))}
@@ -139,40 +248,84 @@ export default function Home() {
         </section>
       )}
 
-      <section className="section bg-white dark:bg-slate-900/40">
-        <div className="container-page">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="overline mb-2">Why MyClientWork</p>
-            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Built for serious developers</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-400">We obsess over quality so you can focus on shipping.</p>
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge color="green" className="mb-3">Why Choose Us</Badge>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Everything you need to ship</h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
+              We focus on quality, documentation, and developer experience so you can focus on building.
+            </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {whyChooseUs.map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: i * 0.05 }} className="card-hover group p-6">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400"><item.icon size={22} /></div>
-                <h3 className="font-display text-lg font-bold">{item.title}</h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{item.description}</p>
-              </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feat, i) => {
+              const Icon = feat.icon
+              return (
+                <motion.div
+                  key={feat.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mb-4 shadow-lg shadow-brand-500/25">
+                    <Icon size={22} className="text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{feat.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{feat.desc}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50/50 dark:bg-gray-900/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {techStack.map((tech, i) => (
+              <motion.span
+                key={tech}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="px-4 py-2 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm"
+              >
+                {tech}
+              </motion.span>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container-page">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 px-6 py-16 text-center sm:px-12 sm:py-20">
-            <AnimatedBackground variant="subtle" />
-            <div className="relative mx-auto max-w-2xl">
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Ready to ship your next project?</h2>
-              <p className="mt-4 text-lg text-brand-100 text-balance">Join thousands of developers building faster with premium, production-ready source code.</p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link to="/register" className="group inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-base font-semibold text-brand-700 shadow-lg transition-transform hover:scale-105">Create free account <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" /></Link>
-                <Link to="/projects" className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10">Browse marketplace</Link>
-              </div>
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative rounded-3xl bg-gradient-to-br from-brand-600 to-brand-800 p-10 lg:p-16 text-center overflow-hidden">
+            <div className="absolute inset-0 -z-10">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
             </div>
-          </motion.div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-white">Ready to build something great?</h2>
+            <p className="mt-4 text-brand-100 text-lg max-w-xl mx-auto">
+              Join thousands of developers shipping faster with our premium source code.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/projects">
+                <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                  Browse Projects <ArrowRight size={18} />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto !border-white/30 !text-white hover:!bg-white/10">
+                  Get in Touch
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-    </>
-  );
+    </div>
+  )
 }

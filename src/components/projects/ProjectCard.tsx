@@ -1,60 +1,78 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Heart, ShoppingCart, Star, Eye, Code2, ArrowUpRight } from 'lucide-react';
-import type { Project } from '@/lib/supabase';
-import { Badge } from '@/components/ui/Badge';
-import { formatPrice, formatNumber, formatDate, cn } from '@/lib/constants';
+import { Link } from 'react-router-dom'
+import { Star, Download, Zap, ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import type { Project } from '../../lib/supabase'
+import { formatPrice, formatNumber, cn } from '../../lib/constants'
+import Badge from '../ui/Badge'
 
-const difficultyVariant: Record<Project['difficulty'], 'accent' | 'brand' | 'warning' | 'error'> = {
-  Beginner: 'accent', Intermediate: 'brand', Advanced: 'warning', Expert: 'error',
-};
+const difficultyColors: Record<string, 'green' | 'amber' | 'red'> = {
+  Beginner: 'green',
+  Intermediate: 'amber',
+  Advanced: 'red',
+}
 
-export function ProjectCard({ project, index = 0 }: { project: Project; index?: number }) {
+export default function ProjectCard({ project, index = 0 }: { project: Project; index?: number }) {
   return (
-    <motion.article initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.45, delay: Math.min(index * 0.06, 0.3), ease: [0.22, 1, 0.36, 1] }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200/60 hover:shadow-card dark:border-slate-800/60 dark:bg-[#1E293B] dark:hover:border-brand-500/20">
-      <Link to={`/projects/${project.slug}`} className="relative block overflow-hidden">
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-          <img src={project.thumbnail_url ?? ''} alt={project.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
-        </div>
-        <div className="absolute left-3 top-3 z-20 flex gap-2">
-          {project.is_featured && <Badge variant="brand" className="shadow-sm">Featured</Badge>}
-          <Badge variant={difficultyVariant[project.difficulty]} className="shadow-sm">{project.difficulty}</Badge>
-        </div>
-        <div className="absolute right-3 top-3 z-20">
-          <span className="flex items-center gap-1 rounded-full bg-slate-900/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-md"><Star size={11} className="fill-amber-400 text-amber-400" />{project.rating.toFixed(1)}</span>
-        </div>
-        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
-          <span className="flex translate-y-2 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-transform duration-300 group-hover:translate-y-0"><Eye size={16} /> View Details <ArrowUpRight size={14} className="text-brand-600" /></span>
-        </div>
-      </Link>
-      <div className="flex flex-1 flex-col space-y-3 p-5">
-        <div className="flex items-center justify-between">
-          <Badge variant="outline">{project.category?.name ?? 'Uncategorized'}</Badge>
-          <span className="text-[11px] text-slate-400 dark:text-slate-500">Updated {formatDate(project.last_updated)}</span>
-        </div>
-        <Link to={`/projects/${project.slug}`}>
-          <h3 className="font-display text-base font-bold leading-snug text-slate-900 transition-colors hover:text-brand-600 dark:text-white dark:hover:text-brand-400">{project.title}</h3>
-        </Link>
-        <p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{project.short_description ?? project.description?.slice(0, 120)}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {project.tech_stack.slice(0, 3).map((tech) => (
-            <span key={tech} className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"><Code2 size={10} /> {tech}</span>
-          ))}
-          {project.tech_stack.length > 3 && <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">+{project.tech_stack.length - 3}</span>}
-        </div>
-        <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
-          <div className="flex items-baseline gap-2">
-            <span className="font-display text-lg font-bold text-slate-900 dark:text-white">{formatPrice(project.price)}</span>
-            <span className="text-xs text-slate-500 dark:text-slate-400">{formatNumber(project.sales_count)} sales</span>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="group bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1"
+    >
+      <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-950 overflow-hidden">
+        {project.thumbnail_url ? (
+          <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Zap className="w-12 h-12 text-gray-300 dark:text-gray-700" />
           </div>
-          <div className="flex gap-1.5">
-            <button aria-label="Add to favorites" className={cn('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-rose-300 hover:text-rose-500 active:scale-95 dark:border-slate-700 dark:text-slate-400')}><Heart size={16} /></button>
-            <Link to={`/projects/${project.slug}`} className="flex h-9 items-center gap-1.5 rounded-lg bg-brand-600 px-3 text-sm font-semibold text-white shadow-glow transition-all hover:bg-brand-700 active:scale-95"><ShoppingCart size={15} /> Buy</Link>
+        )}
+        <div className="absolute top-3 left-3 flex gap-2">
+          {project.is_featured && <Badge color="amber">Featured</Badge>}
+          <Badge color={difficultyColors[project.difficulty] || 'gray'}>{project.difficulty}</Badge>
+        </div>
+        <div className="absolute top-3 right-3">
+          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-full px-2.5 py-1 flex items-center gap-1">
+            <Star size={12} className="fill-amber-400 text-amber-400" />
+            <span className="text-xs font-semibold text-gray-900 dark:text-white">{project.rating.toFixed(1)}</span>
           </div>
         </div>
       </div>
-    </motion.article>
-  );
+
+      <div className="p-5">
+        <h3 className="font-semibold text-gray-900 dark:text-white text-base mb-1 line-clamp-1">{project.title}</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">{project.short_description}</p>
+
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {project.tech_stack.slice(0, 3).map((tech) => (
+            <span key={tech} className="text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium">
+              {tech}
+            </span>
+          ))}
+          {project.tech_stack.length > 3 && (
+            <span className="text-xs px-2 py-0.5 text-gray-400">+{project.tech_stack.length - 3}</span>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+          <div className="flex items-center gap-3">
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{formatPrice(project.price)}</span>
+            <span className="text-xs text-gray-400 flex items-center gap-1">
+              <Download size={12} /> {formatNumber(project.sales_count)}
+            </span>
+          </div>
+          <Link
+            to={`/projects/${project.slug}`}
+            className={cn(
+              'inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400',
+              'group-hover:gap-2 transition-all'
+            )}
+          >
+            View <ArrowRight size={14} />
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  )
 }

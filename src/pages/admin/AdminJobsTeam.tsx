@@ -1,58 +1,94 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase, type Job, type TeamMember } from '@/lib/supabase';
-import { Badge } from '@/components/ui/Badge';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { Briefcase, Users } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query'
+import { Plus, Briefcase, Users } from 'lucide-react'
+import { supabase, type Job, type TeamMember } from '../../lib/supabase'
+import Badge from '../../components/ui/Badge'
+import Button from '../../components/ui/Button'
+import { formatDate } from '../../lib/constants'
 
 export default function AdminJobsTeam() {
-  const { data: jobs, isLoading: jobsLoading } = useQuery({
+  const { data: jobs } = useQuery<Job[]>({
     queryKey: ['admin', 'jobs'],
     queryFn: async () => {
-      const { data } = await supabase.from('jobs').select('*').order('created_at', { ascending: false });
-      return (data ?? []) as Job[];
+      const { data } = await supabase.from('jobs').select('*').order('created_at', { ascending: false })
+      return data as Job[]
     },
-  });
+  })
 
-  const { data: members, isLoading: membersLoading } = useQuery({
-    queryKey: ['admin', 'team_members'],
+  const { data: team } = useQuery<TeamMember[]>({
+    queryKey: ['admin', 'team'],
     queryFn: async () => {
-      const { data } = await supabase.from('team_members').select('*').order('display_order', { ascending: true });
-      return (data ?? []) as TeamMember[];
+      const { data } = await supabase.from('team_members').select('*').order('display_order')
+      return data as TeamMember[]
     },
-  });
+  })
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <div className="mb-4 flex items-center gap-2"><Briefcase size={20} className="text-brand-600" /><h1 className="font-display text-2xl font-bold tracking-tight">Jobs</h1></div>
-        {jobsLoading ? <Skeleton className="h-48 w-full rounded-2xl" /> : jobs && jobs.length > 0 ? (
-          <div className="card divide-y divide-slate-100 dark:divide-slate-800">
-            {jobs.map((j) => (
-              <div key={j.id} className="flex items-center justify-between p-4">
-                <div><p className="text-sm font-semibold text-slate-900 dark:text-white">{j.title}</p><p className="text-xs text-slate-500">{j.department} · {j.location} · {j.employment_type}</p></div>
-                <Badge variant={j.status === 'active' ? 'brand' : 'neutral'}>{j.status}</Badge>
-              </div>
-            ))}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <Briefcase size={24} /> Jobs
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">Manage job postings</p>
           </div>
-        ) : <div className="card p-8 text-center text-sm text-slate-400">No job listings yet.</div>}
-      </div>
-      <div>
-        <div className="mb-4 flex items-center gap-2"><Users size={20} className="text-violet-600" /><h1 className="font-display text-2xl font-bold tracking-tight">Team Members</h1></div>
-        {membersLoading ? <Skeleton className="h-48 w-full rounded-2xl" /> : members && members.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {members.map((m) => (
-              <div key={m.id} className="card p-4">
-                <div className="flex items-center gap-3">
-                  {m.avatar_url ? <img src={m.avatar_url} alt="" className="h-12 w-12 rounded-full object-cover" /> : <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">{m.full_name[0]}</div>}
-                  <div><p className="text-sm font-semibold text-slate-900 dark:text-white">{m.full_name}</p><p className="text-xs text-slate-500">{m.designation}</p></div>
+          <Button size="sm"><Plus size={16} /> Add Job</Button>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          {jobs?.map((job) => (
+            <div key={job.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{job.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{job.department} · {job.location}</p>
                 </div>
-                <p className="mt-2 line-clamp-2 text-xs text-slate-500">{m.bio}</p>
-                <div className="mt-2 flex flex-wrap gap-1">{m.skills.slice(0, 3).map((s) => <Badge key={s} variant="neutral">{s}</Badge>)}</div>
+                <Badge color={job.status === 'active' ? 'green' : 'gray'}>{job.status}</Badge>
               </div>
-            ))}
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{job.employment_type} · {job.salary_range || 'Salary TBD'}</p>
+              <p className="text-xs text-gray-400 mt-2">Posted {formatDate(job.created_at)}</p>
+            </div>
+          ))}
+          {(!jobs || jobs.length === 0) && (
+            <p className="text-gray-500 dark:text-gray-400 text-sm col-span-2">No jobs posted yet.</p>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <Users size={24} /> Team Members
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400">Manage your team</p>
           </div>
-        ) : <div className="card p-8 text-center text-sm text-slate-400">No team members yet. The About page shows the static team cards.</div>}
+          <Button size="sm"><Plus size={16} /> Add Member</Button>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {team?.map((member) => (
+            <div key={member.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 text-center">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">
+                {member.full_name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-white">{member.full_name}</h3>
+              <p className="text-sm text-brand-600 dark:text-brand-400">{member.designation}</p>
+              <div className="flex flex-wrap justify-center gap-1 mt-2">
+                {member.skills.slice(0, 3).map((s) => (
+                  <span key={s} className="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">{s}</span>
+                ))}
+              </div>
+              <Badge color={member.is_active ? 'green' : 'gray'} className="mt-3">
+                {member.is_active ? 'Active' : 'Inactive'}
+              </Badge>
+            </div>
+          ))}
+          {(!team || team.length === 0) && (
+            <p className="text-gray-500 dark:text-gray-400 text-sm col-span-3">No team members yet.</p>
+          )}
+        </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,49 +1,61 @@
-import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, Mail, MapPin, ArrowUpRight } from 'lucide-react';
-import { Logo } from '@/components/ui/Logo';
-import { NAV_LINKS, SITE } from '@/lib/constants';
+import { Link } from 'react-router-dom'
+import { Github, Twitter, Linkedin, Mail } from 'lucide-react'
+import Logo from '../ui/Logo'
+import { NAV_LINKS, SITE } from '../../lib/constants'
 
-export function Footer() {
+export default function Footer() {
   return (
-    <footer className="border-t border-slate-200/70 bg-white dark:border-slate-800/70 dark:bg-slate-950">
-      <div className="container-page py-12 lg:py-16">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4">
-            <Logo />
-            <p className="max-w-xs text-sm text-slate-500 dark:text-slate-400">{SITE.description}</p>
-            <div className="flex gap-2">
-              <a href={SITE.social.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Github size={16} /></a>
-              <a href={SITE.social.twitter} target="_blank" rel="noreferrer" aria-label="Twitter" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Twitter size={16} /></a>
-              <a href={SITE.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Linkedin size={16} /></a>
+    <footer className="bg-gray-900 dark:bg-black text-gray-400 mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <Logo textClassName="text-white" />
+            <p className="mt-4 text-sm max-w-md">
+              {SITE.tagline}. Buy production-ready source code projects with instant download and lifetime updates.
+            </p>
+            <div className="flex gap-3 mt-6">
+              <a href="#" className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-brand-600 flex items-center justify-center transition-colors">
+                <Github size={18} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-brand-600 flex items-center justify-center transition-colors">
+                <Twitter size={18} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-brand-600 flex items-center justify-center transition-colors">
+                <Linkedin size={18} />
+              </a>
+              <a href={`mailto:${SITE.email}`} className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-brand-600 flex items-center justify-center transition-colors">
+                <Mail size={18} />
+              </a>
             </div>
           </div>
+
           <div>
-            <h4 className="mb-4 font-display text-sm font-bold text-slate-900 dark:text-white">Explore</h4>
-            <ul className="space-y-2.5">{NAV_LINKS.map((link) => <li key={link.to}><Link to={link.to} className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">{link.label}</Link></li>)}</ul>
-          </div>
-          <div>
-            <h4 className="mb-4 font-display text-sm font-bold text-slate-900 dark:text-white">Resources</h4>
-            <ul className="space-y-2.5">
-              <li><Link to="/login" className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Login</Link></li>
-              <li><Link to="/register" className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Register</Link></li>
-              <li><Link to="/dashboard" className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Dashboard</Link></li>
-              <li><Link to="/admin" className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">Admin</Link></li>
+            <h3 className="text-white font-semibold text-sm mb-4">Navigate</h3>
+            <ul className="space-y-2">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link to={link.href} className="text-sm hover:text-white transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
+
           <div>
-            <h4 className="mb-4 font-display text-sm font-bold text-slate-900 dark:text-white">Get in touch</h4>
-            <ul className="space-y-2.5 text-sm text-slate-500 dark:text-slate-400">
-              <li className="flex items-center gap-2"><MapPin size={14} className="text-slate-400" /> {SITE.address}</li>
-              <li className="flex items-center gap-2"><Mail size={14} className="text-slate-400" /> {SITE.email}</li>
+            <h3 className="text-white font-semibold text-sm mb-4">Contact</h3>
+            <ul className="space-y-2 text-sm">
+              <li>{SITE.email}</li>
+              <li>{SITE.location}</li>
             </ul>
-            <a href={`mailto:${SITE.email}`} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Contact us <ArrowUpRight size={14} /></a>
           </div>
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200/70 pt-6 dark:border-slate-800/70 sm:flex-row">
-          <p className="text-xs text-slate-400 dark:text-slate-500">&copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.</p>
-          <p className="text-xs text-slate-400 dark:text-slate-500">Built with care for developers.</p>
+
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs">© {new Date().getFullYear()} {SITE.name}. All rights reserved.</p>
+          <p className="text-xs">Built with React, Vite & Supabase</p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

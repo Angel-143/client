@@ -1,188 +1,206 @@
-import { motion } from 'framer-motion';
-import { Target, Heart, Users, Rocket, Code2, Github, Linkedin, Mail, Globe, Briefcase, GraduationCap, Sparkles } from 'lucide-react';
-import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
-import { Badge } from '@/components/ui/Badge';
+import { motion } from 'framer-motion'
+import { Github, Linkedin, Mail, Code2, Sparkles, Target, Heart } from 'lucide-react'
+import Badge from '../components/ui/Badge'
+import { SITE } from '../lib/constants'
+
+const teamMembers = [
+  {
+    name: 'Aslok Singh Rajput',
+    designation: 'Full-Stack Developer & Founder',
+    bio: 'Building scalable web applications with React, Node.js and cloud infrastructure. Passionate about clean code and developer experience.',
+    skills: ['React', 'TypeScript', 'Node.js', 'Supabase', 'AWS', 'Docker'],
+    gradient: 'from-brand-500 via-brand-600 to-blue-700',
+    social: { github: '#', linkedin: '#', email: '#' },
+  },
+  {
+    name: 'Bikash Kushwaha',
+    designation: 'Backend Engineer',
+    bio: 'Database architect and API specialist. Loves designing systems that scale gracefully and perform under pressure.',
+    skills: ['PostgreSQL', 'Node.js', 'Python', 'Redis', 'GraphQL', 'Kubernetes'],
+    gradient: 'from-emerald-500 via-teal-600 to-cyan-700',
+    social: { github: '#', linkedin: '#', email: '#' },
+  },
+  {
+    name: 'Sandip Kumar Sah',
+    designation: 'Frontend & UI Engineer',
+    bio: 'Turning designs into pixel-perfect, accessible interfaces. Obsessed with animations, micro-interactions, and user delight.',
+    skills: ['React', 'Tailwind CSS', 'Framer Motion', 'Figma', 'Next.js', 'Vite'],
+    gradient: 'from-amber-500 via-orange-600 to-red-600',
+    social: { github: '#', linkedin: '#', email: '#' },
+  },
+]
 
 const values = [
-  { icon: Target, title: 'Quality First', description: 'Every project is reviewed and held to a high bar before it reaches the marketplace.' },
-  { icon: Heart, title: 'Developer-Centric', description: 'We build for developers, not around them. Clean code, clear docs, no fluff.' },
-  { icon: Users, title: 'Community Driven', description: 'A growing community of makers and buyers who help each other ship faster.' },
-  { icon: Rocket, title: 'Ship Faster', description: 'Skip the boilerplate. Start from a working, tested base and focus on what matters.' },
-];
+  { icon: Code2, title: 'Quality First', desc: 'Every line of code is reviewed, tested, and documented to meet production standards.' },
+  { icon: Target, title: 'Developer Experience', desc: 'We build tools and projects that developers love to use. Clean setup, clear docs.' },
+  { icon: Heart, title: 'Community Driven', desc: 'Your feedback shapes what we build. We listen, iterate, and ship what you need.' },
+  { icon: Sparkles, title: 'Always Improving', desc: 'Lifetime updates on every project. We continuously refine and add features.' },
+]
 
-const stats = [{ value: '11+', label: 'Premium Projects' }, { value: '8.5K+', label: 'Developers' }, { value: '2.4K+', label: 'Downloads' }, { value: '4.8★', label: 'Avg. Rating' }];
-
-type TeamMember = {
-  id: string; name: string; role: string; bio: string;
-  skills: string[]; technologies: string[];
-  experience: { role: string; company: string; period: string; description?: string }[];
-  social: { github?: string; linkedin?: string; portfolio?: string; email?: string };
-};
-
-const team: TeamMember[] = [
-  {
-    id: 'aslok', name: 'Aslok Singh Rajput', role: 'Full-Stack Developer & ML Engineer',
-    bio: 'B.Tech CSE student at KIIT University (CGPA 8.49) specializing in full-stack development and machine learning. Built production MERN apps with role-based auth and real-time features, plus NLP and predictive ML models deployed with Flask and Scikit-learn.',
-    skills: ['Full-Stack Development', 'Machine Learning', 'NLP & Sentiment Analysis', 'Data Visualization', 'Software Testing', 'Problem Solving'],
-    technologies: ['Python', 'Java', 'JavaScript', 'React.js', 'Node.js', 'Express', 'Spring Boot', 'Angular', 'Flask', 'Scikit-learn', 'NLTK', 'Pandas', 'NumPy', 'MySQL', 'MongoDB', 'AWS', 'Git', 'Postman', 'Tableau', 'Power BI'],
-    experience: [
-      { role: 'WingX – Food Delivery Platform', company: 'MERN Full-Stack Project', period: 'Mar 2025 – Mar 2026', description: 'Built a full-stack MERN food delivery app with 3 user roles, JWT auth, Razorpay payments, Socket.io real-time updates, and a LogMeal nutrition scanner.' },
-      { role: 'Twitter Sentiment Analysis', company: 'NLP / Machine Learning', period: 'May 2025 – Jul 2025', description: 'Built a sentiment classifier using NLP, NLTK, TF-IDF feature extraction, and Scikit-learn for social media trend analysis.' },
-      { role: 'Heart Disease Prediction', company: 'ML Web Application', period: 'Dec 2024 – Mar 2025', description: 'Designed a Flask + Scikit-learn web app predicting heart disease risk from health inputs, with MySQL persistence and Postman-tested APIs.' },
-    ],
-    social: { email: 'aslok.rajput143@gmail.com' },
-  },
-  {
-    id: 'bikash', name: 'Bikash Kushwaha', role: 'Full-Stack Developer & Security Engineer',
-    bio: 'B.Tech CSE student at KIIT University (CGPA 8.71) focused on full-stack development, Azure DevOps, and cybersecurity. Built a client-side encrypted cloud storage prototype and an AI-driven Zero Trust IAM system achieving 0.91 F1-score. Microsoft AZ-900 and AZ-400 certified.',
-    skills: ['Full-Stack Development', 'Cybersecurity & IAM', 'Zero Trust Architecture', 'Azure DevOps & CI/CD', 'Machine Learning', 'Cloud Infrastructure'],
-    technologies: ['Python', 'Java', 'JavaScript', 'Dart', 'React.js', 'Node.js', 'Express', 'Flutter', 'Spring Boot', 'Angular', 'TensorFlow', 'Scikit-learn', 'MongoDB', 'MySQL', 'Docker', 'Microsoft Azure', 'Azure DevOps', 'GitHub Actions', 'AWS', 'KQL', 'Bicep'],
-    experience: [
-      { role: 'Full Stack Development Intern', company: 'Academy of Skill Development', period: 'May 2025 – Jul 2025', description: 'Built Content Sphere Hub, a full-stack CMS with React, Node, Express, MongoDB, JWT auth, reusable UI components, dark mode, and error-handling middleware.' },
-      { role: 'SecureDrive – Secure Cloud Storage', company: 'Research Project', period: '2025', description: 'Developed a browser-native secure cloud storage prototype with client-side AES-GCM encryption, deduplication, and ProVerif-validated protocols.' },
-      { role: 'AI-Driven Dynamic Access Control for IAM', company: 'Zero Trust Research', period: 'Jun 2025', description: 'Built a Zero Trust IAM prototype analyzing behaviour signals to classify access; achieved 0.91 F1-score, 97% attack blocking, 48ms decision latency.' },
-    ],
-    social: { linkedin: 'https://linkedin.com/in/kushwahabikash', email: 'bikashkushwaha31@gmail.com' },
-  },
-  {
-    id: 'sandip', name: 'Sandip Kumar Sah', role: 'Full-Stack Developer (MERN)',
-    bio: 'Full Stack Developer with hands-on MERN experience building apps used by 5,000+ real users. B.Tech CSE at KIIT University (GPA 8.84). Skilled in React, Node, Express, MongoDB, TypeScript, JWT/RBAC auth, and AWS/Vercel deployment. Shipped 2 production-grade apps end-to-end.',
-    skills: ['Full-Stack Development', 'RESTful API Design', 'Authentication & RBAC', 'Database Optimization', 'Cloud Deployment', 'System Design'],
-    technologies: ['JavaScript', 'TypeScript', 'Python', 'React.js', 'Node.js', 'Express', 'MongoDB', 'MySQL', 'Mongoose', 'Tailwind CSS', 'JWT', 'WebSockets', 'Docker', 'AWS (EC2, S3)', 'Vercel', 'Git', 'Postman', 'Nodemailer'],
-    experience: [
-      { role: 'Full Stack (MERN) Developer Intern', company: 'AICTE – EduSkills', period: 'Dec 2025 – Jun 2026', description: 'Built a Customer Engagement Task Tracking app with Node.js, MongoDB, JWT access/refresh tokens, interactive dashboard, and secure cookie-based sessions.' },
-      { role: 'KIITGO – Smart Bus Service System', company: 'Production MERN App', period: 'Jun – Oct 2025', description: 'Built a full-stack bus transport platform serving 5,000+ students with 3 role-based portals, sub-100ms REST APIs, RBAC, and automated email notifications. Deployed on Vercel.' },
-      { role: 'TaskFlow – Project Management Platform', company: 'Production MERN App', period: 'Oct – Dec 2025', description: 'Built a Kanban project management app with drag-and-drop, team collaboration, analytics dashboard, calendar view, lazy loading, and CSV export. Deployed on Vercel.' },
-    ],
-    social: { github: 'https://github.com/Sandip4083', linkedin: 'https://linkedin.com/in/Sandip4083', portfolio: 'https://sandip-portfolio.vercel.app', email: 'sandipcloud26@gmail.com' },
-  },
-];
-
-const socialLinks = [
-  { key: 'github', icon: Github, label: 'GitHub' },
-  { key: 'linkedin', icon: Linkedin, label: 'LinkedIn' },
-  { key: 'portfolio', icon: Globe, label: 'Portfolio' },
-  { key: 'email', icon: Mail, label: 'Email' },
-] as const;
+const timeline = [
+  { year: '2023', title: 'Founded MyClientWork', desc: 'Started with a simple mission: help developers ship faster.' },
+  { year: '2024', title: '50+ Projects Published', desc: 'Built a catalog of premium, production-ready source code.' },
+  { year: '2025', title: '3,200+ Developers', desc: 'Growing community of developers trust our code.' },
+  { year: '2026', title: 'Lifetime Updates Program', desc: 'Every purchase now includes free lifetime updates.' },
+]
 
 export default function About() {
   return (
-    <>
-      <section className="relative overflow-hidden">
-        <AnimatedBackground variant="hero" />
-        <div className="container-page py-20 sm:py-24">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mx-auto max-w-3xl text-center">
-            <span className="overline mb-4 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 dark:border-brand-500/30 dark:bg-brand-500/10"><Code2 size={14} /> About MyClientWork</span>
-            <h1 className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl"><span className="heading-gradient">A premium marketplace built by developers, for developers</span></h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300 text-balance">MyClientWork was created to solve a simple problem: finding high-quality, production-ready source code should be easy. We curate, review, and sell premium projects so you can skip the boilerplate and ship real products faster.</p>
+    <div className="min-h-screen">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/50 to-white dark:from-brand-950/20 dark:to-gray-950 py-20">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-brand-200/30 dark:bg-brand-900/20 rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Badge color="brand" className="mb-5">About Us</Badge>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
+              We help developers{' '}
+              <span className="bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">ship faster</span>
+            </h1>
+            <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              {SITE.name} is a premium source code marketplace based in {SITE.location}. We build production-ready projects so you can focus on what matters — launching your product.
+            </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="border-y border-slate-200/70 bg-white dark:border-slate-800/70 dark:bg-slate-900/40">
-        <div className="container-page py-12">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-            {stats.map((s) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="text-center">
-                <p className="font-display text-3xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400 sm:text-4xl">{s.value}</p>
-                <p className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">{s.label}</p>
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge color="brand" className="mb-3">Our Values</Badge>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">What drives us</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, i) => {
+              const Icon = value.icon
+              return (
+                <motion.div
+                  key={value.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mb-4 shadow-lg shadow-brand-500/25">
+                    <Icon size={22} className="text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{value.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{value.desc}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50/50 dark:bg-gray-900/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge color="amber" className="mb-3">Our Journey</Badge>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">How we got here</h2>
+          </div>
+          <div className="relative max-w-3xl mx-auto">
+            <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 -translate-x-1/2" />
+            {timeline.map((item, i) => (
+              <motion.div
+                key={item.year}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className={`relative flex items-center mb-8 ${i % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}
+              >
+                <div className="hidden sm:block flex-1" />
+                <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-500 border-4 border-white dark:border-gray-950 z-10" />
+                <div className="flex-1 ml-12 sm:ml-0 sm:pl-12">
+                  <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5">
+                    <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{item.year}</span>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mt-1">{item.title}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{item.desc}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container-page">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="overline mb-2">Our principles</p>
-            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Our values</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-400">The principles that guide everything we build.</p>
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <Badge color="green" className="mb-3">Meet the Team</Badge>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">The people behind the code</h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-xl mx-auto">
+              A small, passionate team building tools for developers worldwide.
+            </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((v, i) => (
-              <motion.div key={v.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.06 }} className="card-hover group p-6">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/10 dark:text-brand-400"><v.icon size={22} /></div>
-                <h3 className="font-display text-lg font-bold">{v.title}</h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{v.description}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teamMembers.map((member, i) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="group relative bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-gray-300/50 dark:hover:shadow-black/40 transition-all duration-500 hover:-translate-y-1"
+              >
+                <div className={`relative h-32 bg-gradient-to-br ${member.gradient} overflow-hidden`}>
+                  <div className="absolute inset-0 opacity-30">
+                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                  </div>
+                  <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
+                    <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${member.gradient} border-4 border-white dark:border-gray-900 flex items-center justify-center shadow-xl`}>
+                      <span className="text-3xl font-bold text-white">
+                        {member.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-16 pb-6 px-6 text-center">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">{member.name}</h3>
+                  <p className="text-sm font-medium text-brand-600 dark:text-brand-400 mt-0.5">{member.designation}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">{member.bio}</p>
+
+                  <div className="flex flex-wrap justify-center gap-1.5 mt-4">
+                    {member.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-center gap-2 mt-6 pt-5 border-t border-gray-100 dark:border-gray-800">
+                    <a
+                      href={member.social.github}
+                      className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all"
+                    >
+                      <Github size={16} />
+                    </a>
+                    <a
+                      href={member.social.linkedin}
+                      className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-blue-600 hover:text-white transition-all"
+                    >
+                      <Linkedin size={16} />
+                    </a>
+                    <a
+                      href={member.social.email}
+                      className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-brand-600 hover:text-white transition-all"
+                    >
+                      <Mail size={16} />
+                    </a>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-
-      <section className="section bg-white dark:bg-slate-900/40">
-        <div className="container-page">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="overline mb-2">The team</p>
-            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Meet the developers</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-400">The people behind MyClientWork.</p>
-          </div>
-          <div className="space-y-8">
-            {team.map((member, i) => <TeamMemberCard key={member.id} member={member} index={i} reverse={i % 2 === 1} />)}
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-function TeamMemberCard({ member, index, reverse }: { member: TeamMember; index: number; reverse: boolean }) {
-  return (
-    <motion.article initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.2) }} className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft dark:border-slate-800/60 dark:bg-[#1E293B]">
-      <div className={`grid gap-0 lg:grid-cols-12 ${reverse ? 'lg:[direction:rtl]' : ''}`}>
-        <div className="relative lg:col-span-4 [direction:ltr]">
-          <div className="relative aspect-square h-full min-h-[280px] overflow-hidden bg-gradient-to-br from-brand-600 via-violet-600 to-accent-500 lg:aspect-auto">
-            <div className="absolute inset-0 bg-noise opacity-30" />
-            <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center text-white">
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/15 text-4xl font-bold backdrop-blur-md">{member.name.split(' ').map((n) => n[0]).join('')}</div>
-              <p className="mt-4 text-xs font-medium uppercase tracking-widest text-white/80">{member.role}</p>
-            </div>
-          </div>
-        </div>
-        <div className="space-y-6 p-6 sm:p-8 lg:col-span-8 [direction:ltr]">
-          <div>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h3 className="font-display text-2xl font-bold tracking-tight">{member.name}</h3>
-                <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-brand-600 dark:text-brand-400"><Briefcase size={14} /> {member.role}</p>
-              </div>
-              <div className="flex gap-2">
-                {socialLinks.map(({ key, icon: Icon, label }) => {
-                  const url = member.social[key as keyof typeof member.social];
-                  if (!url) return null;
-                  const href = key === 'email' ? `mailto:${url}` : url;
-                  return <a key={key} href={href} target="_blank" rel="noreferrer" aria-label={`${member.name} on ${label}`} className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-500/40 dark:hover:text-brand-400"><Icon size={16} /></a>;
-                })}
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{member.bio}</p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div>
-              <p className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"><Sparkles size={12} className="text-accent-500" /> Skills</p>
-              <div className="flex flex-wrap gap-1.5">{member.skills.map((s) => <Badge key={s} variant="brand">{s}</Badge>)}</div>
-            </div>
-            <div>
-              <p className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"><Code2 size={12} className="text-violet-500" /> Technologies</p>
-              <div className="flex flex-wrap gap-1.5">{member.technologies.map((t) => <Badge key={t} variant="neutral">{t}</Badge>)}</div>
-            </div>
-          </div>
-          <div>
-            <p className="mb-3 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"><GraduationCap size={12} className="text-success-500" /> Experience</p>
-            <ol className="relative space-y-3 border-l border-slate-200 pl-4 dark:border-slate-700">
-              {member.experience.map((exp, idx) => (
-                <li key={idx} className="relative">
-                  <span className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-500/20" />
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-2"><p className="text-sm font-semibold text-slate-900 dark:text-white">{exp.role}</p><span className="text-[11px] font-medium text-slate-400">{exp.period}</span></div>
-                  <p className="text-xs text-brand-600 dark:text-brand-400">{exp.company}</p>
-                  {exp.description && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{exp.description}</p>}
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </div>
-    </motion.article>
-  );
+    </div>
+  )
 }

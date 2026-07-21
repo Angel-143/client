@@ -1,18 +1,25 @@
-import { cn } from '@/lib/constants';
+import { cn } from '../../lib/constants'
 
-type Variant = 'brand' | 'violet' | 'accent' | 'success' | 'warning' | 'error' | 'neutral' | 'outline';
+type BadgeColor = 'brand' | 'green' | 'amber' | 'red' | 'gray'
 
-const variants: Record<Variant, string> = {
-  brand: 'bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300',
-  violet: 'bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300',
-  accent: 'bg-accent-100 text-accent-700 dark:bg-accent-500/15 dark:text-accent-300',
-  success: 'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500',
-  warning: 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-500',
-  error: 'bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-600',
-  neutral: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-  outline: 'border border-slate-200 text-slate-700 dark:border-slate-700 dark:text-slate-300',
-};
+interface BadgeProps {
+  children: React.ReactNode
+  color?: BadgeColor
+  className?: string
+}
 
-export function Badge({ variant = 'neutral', className, children }: { variant?: Variant; className?: string; children: React.ReactNode }) {
-  return <span className={cn('badge', variants[variant], className)}>{children}</span>;
+const colors: Record<BadgeColor, string> = {
+  brand: 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300',
+  green: 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  amber: 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  red: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  gray: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+}
+
+export default function Badge({ children, color = 'gray', className }: BadgeProps) {
+  return (
+    <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium', colors[color], className)}>
+      {children}
+    </span>
+  )
 }
