@@ -4,15 +4,11 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase env vars. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env');
+  throw new Error('Missing Supabase env vars');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-  },
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
 });
 
 export type Role = 'user' | 'admin';
@@ -83,6 +79,7 @@ export type Order = {
   status: 'pending' | 'completed' | 'refunded' | 'failed';
   transaction_id: string | null;
   created_at: string;
+  project?: Project;
 };
 
 export type ContactMessage = {

@@ -1,15 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-  body {
-    @apply bg-slate-50 text-slate-900 dark:bg-[#0F172A] dark:text-slate-100;
-    font-family: 'Inter', system-ui, sans-serif;
-  }
+  body { @apply bg-slate-50 text-slate-900 dark:bg-[#0F172A] dark:text-slate-100; font-family: 'Inter', system-ui, sans-serif; }
   ::selection { @apply bg-brand-600/20 text-brand-900 dark:bg-brand-400/20 dark:text-brand-100; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { @apply bg-transparent; }
@@ -22,7 +18,7 @@
   .card { @apply rounded-2xl border border-slate-200/80 bg-white shadow-soft dark:border-slate-800/60 dark:bg-[#1E293B]; }
   .card-hover { @apply card transition-all duration-300 hover:-translate-y-1 hover:shadow-card hover:border-brand-200/60 dark:hover:border-brand-500/20; }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.97] dark:focus-visible:ring-offset-slate-950; }
-  .btn-primary { @apply btn bg-brand-600 text-white shadow-glow hover:bg-brand-700 hover:shadow-[0_0_0_1px_rgb(37_99_235/0.5),0_6px_20px_rgb(37_99_235/0.3)]; }
+  .btn-primary { @apply btn bg-brand-600 text-white shadow-glow hover:bg-brand-700; }
   .btn-secondary { @apply btn border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-600; }
   .btn-ghost { @apply btn text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800; }
   .btn-danger { @apply btn bg-error-500 text-white hover:bg-error-600; }

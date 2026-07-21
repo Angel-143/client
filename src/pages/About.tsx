@@ -1,8 +1,5 @@
 import { motion } from 'framer-motion';
-import {
-  Target, Heart, Users, Rocket, Code2, Github, Linkedin, Mail, Globe,
-  Briefcase, GraduationCap, Sparkles,
-} from 'lucide-react';
+import { Target, Heart, Users, Rocket, Code2, Github, Linkedin, Mail, Globe, Briefcase, GraduationCap, Sparkles } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 import { Badge } from '@/components/ui/Badge';
 
@@ -13,29 +10,18 @@ const values = [
   { icon: Rocket, title: 'Ship Faster', description: 'Skip the boilerplate. Start from a working, tested base and focus on what matters.' },
 ];
 
-const stats = [
-  { value: '11+', label: 'Premium Projects' },
-  { value: '8.5K+', label: 'Developers' },
-  { value: '2.4K+', label: 'Downloads' },
-  { value: '4.8★', label: 'Avg. Rating' },
-];
+const stats = [{ value: '11+', label: 'Premium Projects' }, { value: '8.5K+', label: 'Developers' }, { value: '2.4K+', label: 'Downloads' }, { value: '4.8★', label: 'Avg. Rating' }];
 
 type TeamMember = {
-  id: string;
-  name: string;
-  role: string;
-  bio: string;
-  skills: string[];
-  technologies: string[];
+  id: string; name: string; role: string; bio: string;
+  skills: string[]; technologies: string[];
   experience: { role: string; company: string; period: string; description?: string }[];
   social: { github?: string; linkedin?: string; portfolio?: string; email?: string };
 };
 
 const team: TeamMember[] = [
   {
-    id: 'aslok',
-    name: 'Aslok Singh Rajput',
-    role: 'Full-Stack Developer & ML Engineer',
+    id: 'aslok', name: 'Aslok Singh Rajput', role: 'Full-Stack Developer & ML Engineer',
     bio: 'B.Tech CSE student at KIIT University (CGPA 8.49) specializing in full-stack development and machine learning. Built production MERN apps with role-based auth and real-time features, plus NLP and predictive ML models deployed with Flask and Scikit-learn.',
     skills: ['Full-Stack Development', 'Machine Learning', 'NLP & Sentiment Analysis', 'Data Visualization', 'Software Testing', 'Problem Solving'],
     technologies: ['Python', 'Java', 'JavaScript', 'React.js', 'Node.js', 'Express', 'Spring Boot', 'Angular', 'Flask', 'Scikit-learn', 'NLTK', 'Pandas', 'NumPy', 'MySQL', 'MongoDB', 'AWS', 'Git', 'Postman', 'Tableau', 'Power BI'],
@@ -44,14 +30,10 @@ const team: TeamMember[] = [
       { role: 'Twitter Sentiment Analysis', company: 'NLP / Machine Learning', period: 'May 2025 – Jul 2025', description: 'Built a sentiment classifier using NLP, NLTK, TF-IDF feature extraction, and Scikit-learn for social media trend analysis.' },
       { role: 'Heart Disease Prediction', company: 'ML Web Application', period: 'Dec 2024 – Mar 2025', description: 'Designed a Flask + Scikit-learn web app predicting heart disease risk from health inputs, with MySQL persistence and Postman-tested APIs.' },
     ],
-    social: {
-      email: 'aslok.rajput143@gmail.com',
-    },
+    social: { email: 'aslok.rajput143@gmail.com' },
   },
   {
-    id: 'bikash',
-    name: 'Bikash Kushwaha',
-    role: 'Full-Stack Developer & Security Engineer',
+    id: 'bikash', name: 'Bikash Kushwaha', role: 'Full-Stack Developer & Security Engineer',
     bio: 'B.Tech CSE student at KIIT University (CGPA 8.71) focused on full-stack development, Azure DevOps, and cybersecurity. Built a client-side encrypted cloud storage prototype and an AI-driven Zero Trust IAM system achieving 0.91 F1-score. Microsoft AZ-900 and AZ-400 certified.',
     skills: ['Full-Stack Development', 'Cybersecurity & IAM', 'Zero Trust Architecture', 'Azure DevOps & CI/CD', 'Machine Learning', 'Cloud Infrastructure'],
     technologies: ['Python', 'Java', 'JavaScript', 'Dart', 'React.js', 'Node.js', 'Express', 'Flutter', 'Spring Boot', 'Angular', 'TensorFlow', 'Scikit-learn', 'MongoDB', 'MySQL', 'Docker', 'Microsoft Azure', 'Azure DevOps', 'GitHub Actions', 'AWS', 'KQL', 'Bicep'],
@@ -60,15 +42,10 @@ const team: TeamMember[] = [
       { role: 'SecureDrive – Secure Cloud Storage', company: 'Research Project', period: '2025', description: 'Developed a browser-native secure cloud storage prototype with client-side AES-GCM encryption, deduplication, and ProVerif-validated protocols.' },
       { role: 'AI-Driven Dynamic Access Control for IAM', company: 'Zero Trust Research', period: 'Jun 2025', description: 'Built a Zero Trust IAM prototype analyzing behaviour signals to classify access; achieved 0.91 F1-score, 97% attack blocking, 48ms decision latency.' },
     ],
-    social: {
-      linkedin: 'https://linkedin.com/in/kushwahabikash',
-      email: 'bikashkushwaha31@gmail.com',
-    },
+    social: { linkedin: 'https://linkedin.com/in/kushwahabikash', email: 'bikashkushwaha31@gmail.com' },
   },
   {
-    id: 'sandip',
-    name: 'Sandip Kumar Sah',
-    role: 'Full-Stack Developer (MERN)',
+    id: 'sandip', name: 'Sandip Kumar Sah', role: 'Full-Stack Developer (MERN)',
     bio: 'Full Stack Developer with hands-on MERN experience building apps used by 5,000+ real users. B.Tech CSE at KIIT University (GPA 8.84). Skilled in React, Node, Express, MongoDB, TypeScript, JWT/RBAC auth, and AWS/Vercel deployment. Shipped 2 production-grade apps end-to-end.',
     skills: ['Full-Stack Development', 'RESTful API Design', 'Authentication & RBAC', 'Database Optimization', 'Cloud Deployment', 'System Design'],
     technologies: ['JavaScript', 'TypeScript', 'Python', 'React.js', 'Node.js', 'Express', 'MongoDB', 'MySQL', 'Mongoose', 'Tailwind CSS', 'JWT', 'WebSockets', 'Docker', 'AWS (EC2, S3)', 'Vercel', 'Git', 'Postman', 'Nodemailer'],
@@ -77,12 +54,7 @@ const team: TeamMember[] = [
       { role: 'KIITGO – Smart Bus Service System', company: 'Production MERN App', period: 'Jun – Oct 2025', description: 'Built a full-stack bus transport platform serving 5,000+ students with 3 role-based portals, sub-100ms REST APIs, RBAC, and automated email notifications. Deployed on Vercel.' },
       { role: 'TaskFlow – Project Management Platform', company: 'Production MERN App', period: 'Oct – Dec 2025', description: 'Built a Kanban project management app with drag-and-drop, team collaboration, analytics dashboard, calendar view, lazy loading, and CSV export. Deployed on Vercel.' },
     ],
-    social: {
-      github: 'https://github.com/Sandip4083',
-      linkedin: 'https://linkedin.com/in/Sandip4083',
-      portfolio: 'https://sandip-portfolio.vercel.app',
-      email: 'sandipcloud26@gmail.com',
-    },
+    social: { github: 'https://github.com/Sandip4083', linkedin: 'https://linkedin.com/in/Sandip4083', portfolio: 'https://sandip-portfolio.vercel.app', email: 'sandipcloud26@gmail.com' },
   },
 ];
 
@@ -147,9 +119,7 @@ export default function About() {
             <p className="mt-3 text-slate-600 dark:text-slate-400">The people behind MyClientWork.</p>
           </div>
           <div className="space-y-8">
-            {team.map((member, i) => (
-              <TeamMemberCard key={member.id} member={member} index={i} reverse={i % 2 === 1} />
-            ))}
+            {team.map((member, i) => <TeamMemberCard key={member.id} member={member} index={i} reverse={i % 2 === 1} />)}
           </div>
         </div>
       </section>
@@ -159,8 +129,7 @@ export default function About() {
 
 function TeamMemberCard({ member, index, reverse }: { member: TeamMember; index: number; reverse: boolean }) {
   return (
-    <motion.article initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.2) }}
-      className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft dark:border-slate-800/60 dark:bg-[#1E293B]">
+    <motion.article initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.2) }} className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft dark:border-slate-800/60 dark:bg-[#1E293B]">
       <div className={`grid gap-0 lg:grid-cols-12 ${reverse ? 'lg:[direction:rtl]' : ''}`}>
         <div className="relative lg:col-span-4 [direction:ltr]">
           <div className="relative aspect-square h-full min-h-[280px] overflow-hidden bg-gradient-to-br from-brand-600 via-violet-600 to-accent-500 lg:aspect-auto">
@@ -183,9 +152,7 @@ function TeamMemberCard({ member, index, reverse }: { member: TeamMember; index:
                   const url = member.social[key as keyof typeof member.social];
                   if (!url) return null;
                   const href = key === 'email' ? `mailto:${url}` : url;
-                  return (
-                    <a key={key} href={href} target="_blank" rel="noreferrer" aria-label={`${member.name} on ${label}`} className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-500/40 dark:hover:text-brand-400"><Icon size={16} /></a>
-                  );
+                  return <a key={key} href={href} target="_blank" rel="noreferrer" aria-label={`${member.name} on ${label}`} className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-500/40 dark:hover:text-brand-400"><Icon size={16} /></a>;
                 })}
               </div>
             </div>
@@ -207,10 +174,7 @@ function TeamMemberCard({ member, index, reverse }: { member: TeamMember; index:
               {member.experience.map((exp, idx) => (
                 <li key={idx} className="relative">
                   <span className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-500/20" />
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{exp.role}</p>
-                    <span className="text-[11px] font-medium text-slate-400">{exp.period}</span>
-                  </div>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-2"><p className="text-sm font-semibold text-slate-900 dark:text-white">{exp.role}</p><span className="text-[11px] font-medium text-slate-400">{exp.period}</span></div>
                   <p className="text-xs text-brand-600 dark:text-brand-400">{exp.company}</p>
                   {exp.description && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{exp.description}</p>}
                 </li>
