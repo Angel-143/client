@@ -12,26 +12,14 @@ export function Footer() {
             <Logo />
             <p className="max-w-xs text-sm text-slate-500 dark:text-slate-400">{SITE.description}</p>
             <div className="flex gap-2">
-              <a href={SITE.social.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40">
-                <Github size={16} />
-              </a>
-              <a href={SITE.social.twitter} target="_blank" rel="noreferrer" aria-label="Twitter" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40">
-                <Twitter size={16} />
-              </a>
-              <a href={SITE.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40">
-                <Linkedin size={16} />
-              </a>
+              <a href={SITE.social.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Github size={16} /></a>
+              <a href={SITE.social.twitter} target="_blank" rel="noreferrer" aria-label="Twitter" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Twitter size={16} /></a>
+              <a href={SITE.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:scale-105 hover:border-brand-300 hover:text-brand-600 active:scale-95 dark:border-slate-700 dark:hover:border-brand-500/40"><Linkedin size={16} /></a>
             </div>
           </div>
           <div>
             <h4 className="mb-4 font-display text-sm font-bold text-slate-900 dark:text-white">Explore</h4>
-            <ul className="space-y-2.5">
-              {NAV_LINKS.map((link) => (
-                <li key={link.to}>
-                  <Link to={link.to} className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
+            <ul className="space-y-2.5">{NAV_LINKS.map((link) => <li key={link.to}><Link to={link.to} className="text-sm text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400">{link.label}</Link></li>)}</ul>
           </div>
           <div>
             <h4 className="mb-4 font-display text-sm font-bold text-slate-900 dark:text-white">Resources</h4>
@@ -48,9 +36,7 @@ export function Footer() {
               <li className="flex items-center gap-2"><MapPin size={14} className="text-slate-400" /> {SITE.address}</li>
               <li className="flex items-center gap-2"><Mail size={14} className="text-slate-400" /> {SITE.email}</li>
             </ul>
-            <a href={`mailto:${SITE.email}`} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">
-              Contact us <ArrowUpRight size={14} />
-            </a>
+            <a href={`mailto:${SITE.email}`} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Contact us <ArrowUpRight size={14} /></a>
           </div>
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200/70 pt-6 dark:border-slate-800/70 sm:flex-row">

@@ -29,11 +29,7 @@ export function Navbar() {
 
   useEffect(() => { setOpen(false); setMenuOpen(false); }, [location.pathname]);
 
-  async function handleSignOut() {
-    await signOut();
-    toast.success('Signed out');
-    navigate('/');
-  }
+  async function handleSignOut() { await signOut(); toast.success('Signed out'); navigate('/'); }
 
   const navRects = navRefs.current.map((el) => el?.getBoundingClientRect()).filter(Boolean) as DOMRect[];
   const indicatorStyle = (() => {
@@ -51,21 +47,13 @@ export function Navbar() {
         <div className="relative hidden items-center gap-1 md:flex" onMouseLeave={() => setHoveredNav(null)}>
           <motion.div className="absolute top-1/2 h-9 -translate-y-1/2 rounded-lg bg-slate-100 dark:bg-slate-800/80" animate={indicatorStyle} transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
           {NAV_LINKS.map((link, i) => (
-            <NavLink key={link.to} to={link.to} ref={(el) => { navRefs.current[i] = el; }} onMouseEnter={() => setHoveredNav(i)}
-              className={({ isActive }) => cn('relative z-10 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors', isActive ? 'text-brand-600 dark:text-brand-400' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white')}>
-              {link.label}
-            </NavLink>
+            <NavLink key={link.to} to={link.to} ref={(el) => { navRefs.current[i] = el; }} onMouseEnter={() => setHoveredNav(i)} className={({ isActive }) => cn('relative z-10 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors', isActive ? 'text-brand-600 dark:text-brand-400' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white')}>{link.label}</NavLink>
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={toggle} aria-label="Toggle theme" className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-all hover:bg-slate-100 hover:scale-105 active:scale-95 dark:text-slate-300 dark:hover:bg-slate-800">
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <button onClick={toggle} aria-label="Toggle theme" className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-all hover:bg-slate-100 hover:scale-105 active:scale-95 dark:text-slate-300 dark:hover:bg-slate-800">{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
           {!isAuth ? (
-            <div className="hidden items-center gap-2 sm:flex">
-              <Link to="/login" className="btn-ghost">Login</Link>
-              <Link to="/register" className="btn-primary">Register</Link>
-            </div>
+            <div className="hidden items-center gap-2 sm:flex"><Link to="/login" className="btn-ghost">Login</Link><Link to="/register" className="btn-primary">Register</Link></div>
           ) : (
             <div className="relative hidden sm:block">
               <button onClick={() => setMenuOpen((v) => !v)} className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-sm font-medium transition-all hover:shadow-soft active:scale-95 dark:border-slate-700 dark:bg-slate-900">
@@ -75,12 +63,8 @@ export function Navbar() {
               </button>
               <AnimatePresence>
                 {menuOpen && (
-                  <motion.div initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.96 }} transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-card dark:border-slate-800 dark:bg-slate-900">
-                    <div className="border-b border-slate-100 px-4 py-2 dark:border-slate-800">
-                      <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{profile?.full_name}</p>
-                      <p className="truncate text-xs text-slate-500 dark:text-slate-400">{profile?.email}</p>
-                    </div>
+                  <motion.div initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.96 }} transition={{ duration: 0.15 }} className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-card dark:border-slate-800 dark:bg-slate-900">
+                    <div className="border-b border-slate-100 px-4 py-2 dark:border-slate-800"><p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{profile?.full_name}</p><p className="truncate text-xs text-slate-500 dark:text-slate-400">{profile?.email}</p></div>
                     <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"><LayoutDashboard size={16} /> Dashboard</Link>
                     {isAdmin && <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"><Shield size={16} /> Admin Dashboard</Link>}
                     <div className="my-1 h-px bg-slate-100 dark:bg-slate-800" />
@@ -90,25 +74,17 @@ export function Navbar() {
               </AnimatePresence>
             </div>
           )}
-          <button onClick={() => setOpen((v) => !v)} aria-label="Menu" className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-700 transition-all hover:bg-slate-100 hover:scale-105 active:scale-95 dark:text-slate-200 dark:hover:bg-slate-800 md:hidden">
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <button onClick={() => setOpen((v) => !v)} aria-label="Menu" className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-700 transition-all hover:bg-slate-100 hover:scale-105 active:scale-95 dark:text-slate-200 dark:hover:bg-slate-800 md:hidden">{open ? <X size={20} /> : <Menu size={20} />}</button>
         </div>
       </nav>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-slate-200/70 bg-white/95 backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-950/95 md:hidden">
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden border-t border-slate-200/70 bg-white/95 backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-950/95 md:hidden">
             <div className="container-page space-y-1 py-4">
-              {NAV_LINKS.map((link) => (
-                <NavLink key={link.to} to={link.to} className={({ isActive }) => cn('block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300' : 'text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800')}>{link.label}</NavLink>
-              ))}
+              {NAV_LINKS.map((link) => <NavLink key={link.to} to={link.to} className={({ isActive }) => cn('block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300' : 'text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800')}>{link.label}</NavLink>)}
               <div className="my-2 h-px bg-slate-100 dark:bg-slate-800" />
               {!isAuth ? (
-                <div className="flex gap-2">
-                  <Link to="/login" className="btn-secondary flex-1">Login</Link>
-                  <Link to="/register" className="btn-primary flex-1">Register</Link>
-                </div>
+                <div className="flex gap-2"><Link to="/login" className="btn-secondary flex-1">Login</Link><Link to="/register" className="btn-primary flex-1">Register</Link></div>
               ) : (
                 <div className="space-y-1">
                   <Link to="/dashboard" className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"><LayoutDashboard size={16} /> Dashboard</Link>

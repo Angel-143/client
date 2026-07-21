@@ -13,14 +13,6 @@ const variants: Record<Variant, string> = {
   outline: 'border border-slate-200 text-slate-700 dark:border-slate-700 dark:text-slate-300',
 };
 
-export function Badge({
-  variant = 'neutral',
-  className,
-  children,
-}: {
-  variant?: Variant;
-  className?: string;
-  children: React.ReactNode;
-}) {
+export function Badge({ variant = 'neutral', className, children }: { variant?: Variant; className?: string; children: React.ReactNode }) {
   return <span className={cn('badge', variants[variant], className)}>{children}</span>;
 }
