@@ -17,67 +17,41 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+async function loadProfile(userId: string): Promise<Profile | null> {
+  for (let i = 0; i < 5; i++) {
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+    if (data) return data as Profile;
+    if (error) return null;
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  return null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function loadProfile(userId: string): Promise<Profile | null> {
-    for (let i = 0; i < 5; i++) {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-      if (data) return data as Profile;
-      if (error) return null;
-      await new Promise((r) => setTimeout(r, 200));
-    }
-    return null;
-  }
-
   useEffect(() => {
     let active = true;
-
     supabase.auth.getSession().then(async ({ data: { session: s } }) => {
       if (!active) return;
       setSession(s);
-      if (s?.user) {
-        const p = await loadProfile(s.user.id);
-        if (active) setProfile(p);
-      }
+      if (s?.user) { const p = await loadProfile(s.user.id); if (active) setProfile(p); }
       if (active) setLoading(false);
     });
-
     const { data: sub } = supabase.auth.onAuthStateChange(async (_event, s) => {
       setSession(s);
-      if (s?.user) {
-        const p = await loadProfile(s.user.id);
-        setProfile(p);
-      } else {
-        setProfile(null);
-      }
+      if (s?.user) { const p = await loadProfile(s.user.id); setProfile(p); } else { setProfile(null); }
       setLoading(false);
     });
-
-    return () => {
-      active = false;
-      sub.subscription.unsubscribe();
-    };
+    return () => { active = false; sub.subscription.unsubscribe(); };
   }, []);
 
   const value = useMemo<AuthContextValue>(() => ({
-    session,
-    user: session?.user ?? null,
-    profile,
-    isAdmin: profile?.role === 'admin',
-    loading,
+    session, user: session?.user ?? null, profile, isAdmin: profile?.role === 'admin', loading,
     async signUp(email, password, fullName) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: fullName } },
-      });
+      const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } });
       return { error: error?.message ?? null };
     },
     async signIn(email, password) {
@@ -85,27 +59,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: error?.message ?? null };
     },
     async signInWithGoogle() {
-      const redirectTo = `${window.location.origin}/auth/callback`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: {
-          redirectTo,
-          queryParams: { access_type: 'offline', prompt: 'consent' },
-        },
+        options: { redirectTo: `${window.location.origin}/auth/callback`, queryParams: { access_type: 'offline', prompt: 'consent' } },
       });
       return { error: error?.message ?? null };
     },
-    async signOut() {
-      await supabase.auth.signOut();
-      setProfile(null);
-      setSession(null);
-    },
-    async refreshProfile() {
-      if (session?.user) {
-        const p = await loadProfile(session.user.id);
-        setProfile(p);
-      }
-    },
+    async signOut() { await supabase.auth.signOut(); setProfile(null); setSession(null); },
+    async refreshProfile() { if (session?.user) { const p = await loadProfile(session.user.id); setProfile(p); } },
   }), [session, profile, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
