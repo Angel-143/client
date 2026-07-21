@@ -15,36 +15,30 @@ export default function AuthCallback() {
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
-
     let cancelled = false;
 
     async function handleCallback() {
       try {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(window.location.href);
         if (exchangeError) throw exchangeError;
-
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
         if (!session?.user) throw new Error('No session returned after Google sign-in.');
-
         if (cancelled) return;
         setStatus('loading_profile');
-
         let role: Role = 'user';
         for (let attempt = 0; attempt < 10; attempt++) {
           const { data } = await supabase.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
           if (data) { role = (data.role as Role) ?? 'user'; break; }
           await new Promise((r) => setTimeout(r, 250));
         }
-
         if (cancelled) return;
         setStatus('redirecting');
         navigate(role === 'admin' ? '/admin' : '/dashboard', { replace: true });
       } catch (err) {
         if (cancelled) return;
         const msg = err instanceof Error ? err.message : 'Google sign-in failed.';
-        setErrorMsg(msg);
-        setStatus('error');
+        setErrorMsg(msg); setStatus('error');
         await supabase.auth.signOut();
         setTimeout(() => navigate('/login', { replace: true }), 2200);
       }
@@ -62,22 +56,16 @@ export default function AuthCallback() {
           <Logo className="justify-center" showText={false} />
           {status === 'error' ? (
             <div className="mt-8 space-y-3">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-error-50 text-error-500 dark:bg-error-500/15">
-                <AlertCircle size={28} />
-              </div>
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-error-50 text-error-500 dark:bg-error-500/15"><AlertCircle size={28} /></div>
               <h1 className="font-display text-xl font-bold">Sign-in failed</h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">{errorMsg}</p>
               <p className="text-xs text-slate-400">Redirecting to login…</p>
             </div>
           ) : (
             <div className="mt-8 space-y-3">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
-                {status === 'redirecting' ? <ShieldCheck size={28} /> : <Loader2 size={28} className="animate-spin" />}
-              </div>
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">{status === 'redirecting' ? <ShieldCheck size={28} /> : <Loader2 size={28} className="animate-spin" />}</div>
               <h1 className="font-display text-xl font-bold">{status === 'redirecting' ? 'Success!' : 'Completing sign-in…'}</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                {status === 'redirecting' ? 'Taking you to your dashboard.' : 'Securely connecting your Google account.'}
-              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{status === 'redirecting' ? 'Taking you to your dashboard.' : 'Securely connecting your Google account.'}</p>
             </div>
           )}
         </div>
