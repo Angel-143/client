@@ -1,251 +1,162 @@
-import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
 import {
-  ArrowLeft, ShoppingCart, Heart, Star, ExternalLink, Code2, CheckCircle2,
-  Download, ShieldCheck, RefreshCw, Headphones, ChevronRight, Users,
+  ArrowLeft, ShoppingCart, Heart, Star, Check, Code2, ExternalLink,
+  Zap, ShieldCheck, RefreshCw, Clock, TrendingUp,
 } from 'lucide-react';
-import { useProject, useProjects } from '@/hooks/useProjects';
-import { useToggleFavorite, useCreateOrder } from '@/hooks/useData';
-import { useAuth } from '@/context/AuthContext';
+import { useProject, useReviews } from '@/hooks/useProjects';
 import { Badge } from '@/components/ui/Badge';
-import { Rating } from '@/components/ui/Rating';
-import { ProjectCard } from '@/components/projects/ProjectCard';
-import { ProjectCardSkeleton } from '@/components/ui/Skeleton';
-import { formatPrice, formatNumber, formatDate, cn } from '@/lib/constants';
-
-const guarantees = [
-  { icon: ShieldCheck, title: 'Secure checkout', desc: 'Stripe-encrypted payments.' },
-  { icon: Download, title: 'Instant download', desc: 'Get the code right after purchase.' },
-  { icon: RefreshCw, title: 'Lifetime updates', desc: 'Free updates forever.' },
-  { icon: Headphones, title: 'Author support', desc: 'Direct help from the creator.' },
-];
+import { Skeleton, EmptyState } from '@/components/ui/Skeleton';
+import { formatPrice, formatNumber, formatDate } from '@/lib/constants';
+import { PackageX } from 'lucide-react';
 
 export default function ProjectDetails() {
-  const { slug = '' } = useParams();
-  const { data: project, isLoading } = useProject(slug);
-  const { data: related } = useProjects({ limit: 3 });
-  const toggleFavorite = useToggleFavorite();
-  const createOrder = useCreateOrder();
-  const { session } = useAuth();
-  const navigate = useNavigate();
-  const [purchasing, setPurchasing] = useState(false);
-
-  async function handleBuy() {
-    if (!session) {
-      toast.error('Please sign in to purchase.');
-      navigate('/login');
-      return;
-    }
-    if (!project) return;
-    setPurchasing(true);
-    try {
-      await createOrder.mutateAsync({ projectId: project.id, amount: project.price });
-      toast.success('Purchase complete! Check your downloads.');
-      navigate('/dashboard/downloads');
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Purchase failed');
-    } finally {
-      setPurchasing(false);
-    }
-  }
-
-  async function handleFavorite() {
-    if (!session) {
-      toast.error('Sign in to favorite projects.');
-      navigate('/login');
-      return;
-    }
-    try {
-      const res = await toggleFavorite.mutateAsync(project!.id);
-      toast.success(res.favorited ? 'Added to favorites' : 'Removed from favorites');
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Failed');
-    }
-  }
+  const { slug } = useParams<{ slug: string }>();
+  const { data: project, isLoading } = useProject(slug ?? '');
+  const { data: reviews } = useReviews(project?.id ?? '');
 
   if (isLoading) {
     return (
-      <div className="container-page py-12">
-        <ProjectCardSkeleton />
+      <div className="container-page py-10">
+        <Skeleton className="mb-6 h-6 w-32" />
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-4">
+            <Skeleton className="aspect-[16/9] w-full rounded-2xl" />
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-64 w-full rounded-2xl" />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!project) {
     return (
-      <div className="container-page flex flex-col items-center justify-center gap-4 py-24 text-center">
-        <p className="font-display text-2xl font-bold">Project not found</p>
-        <Link to="/projects" className="btn-primary">Back to projects</Link>
+      <div className="container-page py-20">
+        <EmptyState icon={PackageX} title="Project not found" description="The project you're looking for doesn't exist or has been removed." action={<Link to="/projects" className="btn-primary mt-4">Browse all projects</Link>} />
       </div>
     );
   }
 
-  const relatedProjects = (related ?? []).filter((p) => p.id !== project.id).slice(0, 3);
-
   return (
-    <>
-      <div className="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40">
-        <div className="container-page py-4">
-          <nav className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-            <Link to="/" className="hover:text-brand-600">Home</Link>
-            <ChevronRight size={14} />
-            <Link to="/projects" className="hover:text-brand-600">Projects</Link>
-            <ChevronRight size={14} />
-            <span className="truncate text-slate-700 dark:text-slate-300">{project.title}</span>
-          </nav>
-        </div>
-      </div>
+    <div className="container-page py-10">
+      <Link to="/projects" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-brand-600 dark:text-slate-400">
+        <ArrowLeft size={16} /> Back to projects
+      </Link>
 
-      <section className="section">
-        <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-3">
-          {/* Main */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800"
-            >
-              <img
-                src={project.thumbnail_url ?? ''}
-                alt={project.title}
-                className="aspect-video w-full object-cover"
-              />
-            </motion.div>
+      <div className="grid gap-8 lg:grid-cols-3">
+        {/* Left: details */}
+        <div className="lg:col-span-2 space-y-6">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white dark:border-slate-800/60 dark:bg-[#1E293B]">
+            <img src={project.thumbnail_url ?? ''} alt={project.title} className="aspect-[16/9] w-full object-cover" />
+          </motion.div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              {project.is_featured && <Badge variant="brand">Featured</Badge>}
               <Badge variant="outline">{project.category?.name ?? 'Uncategorized'}</Badge>
-              <Badge variant="brand">{project.difficulty}</Badge>
-              {project.is_featured && <Badge variant="accent">Featured</Badge>}
-              <span className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
-                <Star size={14} className="fill-amber-400 text-amber-400" /> {project.rating.toFixed(1)} ({formatNumber(project.sales_count)} sales)
-              </span>
+              <Badge variant="neutral">{project.difficulty}</Badge>
             </div>
-
-            <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-              {project.title}
-            </h1>
-            <p className="mt-3 text-lg text-slate-600 dark:text-slate-300">{project.short_description}</p>
-
-            <div className="mt-8">
-              <h2 className="font-display text-xl font-bold">Overview</h2>
-              <p className="mt-3 leading-relaxed text-slate-600 dark:text-slate-300">{project.description}</p>
-            </div>
-
-            <div className="mt-8">
-              <h2 className="font-display text-xl font-bold">Features</h2>
-              <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {project.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-accent-500" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mt-8">
-              <h2 className="font-display text-xl font-bold">Tech stack</h2>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.tech_stack.map((t) => (
-                  <span key={t} className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                    <Code2 size={14} /> {t}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <h1 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">{project.title}</h1>
+            <p className="mt-3 text-slate-600 dark:text-slate-400">{project.short_description}</p>
           </div>
 
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="card sticky top-20 p-6">
-              <div className="flex items-baseline justify-between">
-                <span className="font-display text-3xl font-extrabold text-slate-900 dark:text-white">
-                  {formatPrice(project.price)}
-                </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">one-time</span>
-              </div>
+          {/* Description */}
+          {project.description && (
+            <div className="card p-6">
+              <h2 className="mb-3 font-display text-lg font-bold">Overview</h2>
+              <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{project.description}</p>
+            </div>
+          )}
 
-              <div className="mt-5 space-y-2.5">
-                <button
-                  onClick={handleBuy}
-                  disabled={purchasing}
-                  className="btn-primary w-full py-3 text-base"
-                >
-                  {purchasing ? 'Processing...' : (<><ShoppingCart size={18} /> Buy Now</>)}
-                </button>
-                <div className="flex gap-2">
-                  {project.live_demo_url && (
-                    <a
-                      href={project.live_demo_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn-secondary flex-1"
-                    >
-                      <ExternalLink size={16} /> Live demo
-                    </a>
-                  )}
-                  <button
-                    onClick={handleFavorite}
-                    aria-label="Add to favorites"
-                    className="btn-secondary aspect-square px-0"
-                  >
-                    <Heart size={18} />
-                  </button>
-                </div>
-              </div>
-
-              <dl className="mt-6 space-y-3 border-t border-slate-100 pt-5 text-sm dark:border-slate-800">
-                <div className="flex justify-between">
-                  <dt className="text-slate-500 dark:text-slate-400">Category</dt>
-                  <dd className="font-medium">{project.category?.name ?? '—'}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-slate-500 dark:text-slate-400">Difficulty</dt>
-                  <dd className="font-medium">{project.difficulty}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-slate-500 dark:text-slate-400">Rating</dt>
-                  <dd className="font-medium"><Rating value={project.rating} showValue /></dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-slate-500 dark:text-slate-400">Sales</dt>
-                  <dd className="font-medium">{formatNumber(project.sales_count)}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-slate-500 dark:text-slate-400">Last updated</dt>
-                  <dd className="font-medium">{formatDate(project.last_updated)}</dd>
-                </div>
-              </dl>
-
-              <div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
-                {guarantees.map((g) => (
-                  <div key={g.title} className="flex items-start gap-2">
-                    <g.icon size={16} className="mt-0.5 shrink-0 text-accent-500" />
-                    <div>
-                      <p className="text-xs font-semibold">{g.title}</p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">{g.desc}</p>
-                    </div>
+          {/* Features */}
+          {project.features.length > 0 && (
+            <div className="card p-6">
+              <h2 className="mb-4 font-display text-lg font-bold">Features</h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {project.features.map((f) => (
+                  <div key={f} className="flex items-start gap-2">
+                    <Check size={16} className="mt-0.5 shrink-0 text-success-500" />
+                    <span className="text-sm text-slate-600 dark:text-slate-300">{f}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </aside>
-        </div>
-      </section>
+          )}
 
-      {relatedProjects.length > 0 && (
-        <section className="section pt-0">
-          <div className="container-page">
-            <h2 className="mb-6 font-display text-2xl font-bold tracking-tight">Related projects</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {relatedProjects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+          {/* Tech stack */}
+          {project.tech_stack.length > 0 && (
+            <div className="card p-6">
+              <h2 className="mb-4 font-display text-lg font-bold">Tech Stack</h2>
+              <div className="flex flex-wrap gap-2">
+                {project.tech_stack.map((tech) => (
+                  <span key={tech} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    <Code2 size={14} className="text-brand-500" /> {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Reviews */}
+          {reviews && reviews.length > 0 && (
+            <div className="card p-6">
+              <h2 className="mb-4 font-display text-lg font-bold">Reviews ({reviews.length})</h2>
+              <div className="space-y-4">
+                {reviews.map((r) => (
+                  <div key={r.id} className="border-b border-slate-100 pb-4 last:border-0 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={14} className={i < r.rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300 dark:text-slate-600'} />)}</div>
+                      <span className="text-xs text-slate-400">{formatDate(r.created_at)}</span>
+                    </div>
+                    {r.comment && <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{r.comment}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right: purchase panel */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-24 space-y-4">
+            <div className="card p-6">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-3xl font-bold text-slate-900 dark:text-white">{formatPrice(project.price)}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400">one-time</span>
+              </div>
+              <div className="mt-4 flex items-center gap-4 text-sm">
+                <span className="flex items-center gap-1.5"><Star size={14} className="fill-amber-400 text-amber-400" /> {project.rating.toFixed(1)}</span>
+                <span className="flex items-center gap-1.5"><TrendingUp size={14} className="text-slate-400" /> {formatNumber(project.sales_count)} sales</span>
+              </div>
+
+              <div className="mt-6 space-y-2.5">
+                <button className="btn-primary w-full py-3 text-base"><ShoppingCart size={18} /> Buy Now</button>
+                <button className="btn-secondary w-full"><Heart size={16} /> Add to Favorites</button>
+              </div>
+
+              {project.live_demo_url && (
+                <a href={project.live_demo_url} target="_blank" rel="noreferrer" className="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">
+                  <ExternalLink size={14} /> Live Demo
+                </a>
+              )}
+
+              <div className="my-5 h-px bg-slate-100 dark:bg-slate-800" />
+
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400"><Zap size={15} className="text-accent-500" /> Instant download</div>
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400"><ShieldCheck size={15} className="text-success-500" /> Secure checkout</div>
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400"><RefreshCw size={15} className="text-warning-500" /> Lifetime free updates</div>
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400"><Clock size={15} className="text-slate-400" /> Updated {formatDate(project.last_updated)}</div>
+              </div>
             </div>
           </div>
-        </section>
-      )}
-    </>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,47 +1,49 @@
-export const DEVELOPERS = ['Aslok Singh Rajput', 'Sandip Kumar', 'Bikash Kumar'] as const;
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-export const SITE = {
-  name: 'MyClientWork',
-  tagline: 'Premium Source Code Marketplace for Developers',
-  email: 'gmail-myclientwork3@gmail.com',
-  phones: ['+977-9816210951', '+977-9811138552'],
-  address: 'Kathmandu, Nepal',
-  social: {
-    github: 'https://github.com',
-    twitter: 'https://twitter.com',
-    linkedin: 'https://linkedin.com',
-    discord: 'https://discord.com',
-  },
-};
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const NAV_LINKS = [
   { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
   { label: 'Projects', to: '/projects' },
+  { label: 'About', to: '/about' },
   { label: 'Jobs', to: '/jobs' },
   { label: 'Contact', to: '/contact' },
 ] as const;
 
-export function formatPrice(value: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: value % 1 === 0 ? 0 : 2,
-  }).format(value);
+export const SITE = {
+  name: 'MyClientWork',
+  tagline: 'Premium Source Code Marketplace',
+  description: 'A curated marketplace of production-ready source code for developers.',
+  email: 'support@myclientwork.dev',
+  phone: '+91 98765 43210',
+  address: 'Bhubaneswar, Odisha, India',
+  social: {
+    github: 'https://github.com/myclientwork',
+    twitter: 'https://twitter.com/myclientwork',
+    linkedin: 'https://linkedin.com/company/myclientwork',
+  },
+};
+
+export function formatPrice(price: number | string): string {
+  const n = typeof price === 'string' ? parseFloat(price) : price;
+  return `$${n.toFixed(0)}`;
 }
 
-export function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+export function formatNumber(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return `${n}`;
 }
 
-export function formatNumber(value: number): string {
-  return new Intl.NumberFormat('en-US').format(value);
+export function formatDate(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-export function cn(...classes: (string | false | null | undefined)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function formatDateTime(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
 }

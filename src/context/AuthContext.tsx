@@ -1,25 +1,18 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import type { Session, User } from '@supabase/supabase-js';
 import { supabase, type Profile, type Role } from '@/lib/supabase';
-import type { Session } from '@supabase/supabase-js';
 
 type AuthContextValue = {
   session: Session | null;
+  user: User | null;
   profile: Profile | null;
-  loading: boolean;
   isAdmin: boolean;
+  loading: boolean;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (input: SignUpInput) => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
-};
-
-type SignUpInput = {
-  email: string;
-  password: string;
-  fullName: string;
-  countryCode: string;
-  whatsappNumber: string;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -29,110 +22,91 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function loadProfile(uid: string) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', uid)
-      .maybeSingle();
-    setProfile(data as Profile | null);
+  async function loadProfile(userId: string): Promise<Profile | null> {
+    for (let i = 0; i < 5; i++) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+      if (data) return data as Profile;
+      if (error) return null;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    return null;
   }
 
   useEffect(() => {
-    let mounted = true;
+    let active = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setSession(data.session);
-      if (data.session?.user) {
-        loadProfile(data.session.user.id).finally(() => mounted && setLoading(false));
-      } else {
-        setLoading(false);
+    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+      if (!active) return;
+      setSession(s);
+      if (s?.user) {
+        const p = await loadProfile(s.user.id);
+        if (active) setProfile(p);
       }
+      if (active) setLoading(false);
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      (async () => {
-        setSession(newSession);
-        if (newSession?.user) {
-          await loadProfile(newSession.user.id);
-        } else {
-          setProfile(null);
-        }
-        setLoading(false);
-      })();
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, s) => {
+      setSession(s);
+      if (s?.user) {
+        const p = await loadProfile(s.user.id);
+        setProfile(p);
+      } else {
+        setProfile(null);
+      }
+      setLoading(false);
     });
 
     return () => {
-      mounted = false;
+      active = false;
       sub.subscription.unsubscribe();
     };
   }, []);
 
-  async function signIn(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
-  }
-
-  async function signUp(input: SignUpInput) {
-    const { data, error } = await supabase.auth.signUp({
-      email: input.email,
-      password: input.password,
-      options: {
-        data: {
-          full_name: input.fullName,
-          country_code: input.countryCode,
-          whatsapp_number: input.whatsappNumber,
-        },
-      },
-    });
-    if (error) return { error: error.message };
-
-    // Trigger creates + auto-confirms the profile. Sign the user in immediately
-    // so they reach the dashboard without a separate login step.
-    if (data.user && !data.session) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: input.email,
-        password: input.password,
-      });
-      if (signInError) return { error: signInError.message };
-    }
-    return { error: null };
-  }
-
-  async function signInWithGoogle() {
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo,
-        queryParams: { access_type: 'offline', prompt: 'consent' },
-      },
-    });
-    return { error: error?.message ?? null };
-  }
-
-  async function signOut() {
-    await supabase.auth.signOut();
-    setProfile(null);
-    setSession(null);
-  }
-
-  async function refreshProfile() {
-    if (session?.user) await loadProfile(session.user.id);
-  }
-
-  const value: AuthContextValue = {
+  const value = useMemo<AuthContextValue>(() => ({
     session,
+    user: session?.user ?? null,
     profile,
+    isAdmin: profile?.role === 'admin',
     loading,
-    isAdmin: (profile?.role as Role | undefined) === 'admin',
-    signIn,
-    signUp,
-    signInWithGoogle,
-    signOut,
-    refreshProfile,
-  };
+    async signUp(email, password, fullName) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } },
+      });
+      return { error: error?.message ?? null };
+    },
+    async signIn(email, password) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      return { error: error?.message ?? null };
+    },
+    async signInWithGoogle() {
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo,
+          queryParams: { access_type: 'offline', prompt: 'consent' },
+        },
+      });
+      return { error: error?.message ?? null };
+    },
+    async signOut() {
+      await supabase.auth.signOut();
+      setProfile(null);
+      setSession(null);
+    },
+    async refreshProfile() {
+      if (session?.user) {
+        const p = await loadProfile(session.user.id);
+        setProfile(p);
+      }
+    },
+  }), [session, profile, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -142,3 +116,5 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+
+export type { Role };

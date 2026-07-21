@@ -1,91 +1,42 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase, type Project, type Category } from '@/lib/supabase';
+import { supabase, type Project, type Category, type Review } from '@/lib/supabase';
 
-export function useCategories() {
-  return useQuery<Category[]>({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('categories').select('*').order('name');
-      if (error) throw error;
-      return (data ?? []) as Category[];
-    },
-    staleTime: 1000 * 60 * 10,
-  });
-}
-
-export type ProjectFilters = {
-  search?: string;
+export function useProjects(filters?: {
   category?: string;
-  technology?: string;
-  sort?: 'latest' | 'popular' | 'price_asc' | 'price_desc';
-  minPrice?: number;
-  maxPrice?: number;
-  featured?: boolean;
-  limit?: number;
-  page?: number;
-  pageSize?: number;
-};
-
-export function useProjects(filters: ProjectFilters = {}) {
-  return useQuery<Project[]>({
+  search?: string;
+  difficulty?: string;
+  sort?: 'newest' | 'price-low' | 'price-high' | 'popular' | 'rating';
+}) {
+  return useQuery({
     queryKey: ['projects', filters],
     queryFn: async () => {
-      let query = supabase.from('projects').select('*, category:categories(*)');
-      if (filters.search) {
-        query = query.or(
-          `title.ilike.%${filters.search}%,short_description.ilike.%${filters.search}%,description.ilike.%${filters.search}%`
-        );
+      let q = supabase.from('projects').select('*, category:categories(*)');
+      if (filters?.category && filters.category !== 'all') {
+        q = q.eq('category_id', filters.category);
       }
-      if (filters.category) query = query.eq('category_id', filters.category);
-      if (filters.technology) query = query.filter('tech_stack', 'cs', `["${filters.technology}"]`);
-      if (filters.minPrice !== undefined) query = query.gte('price', filters.minPrice);
-      if (filters.maxPrice !== undefined) query = query.lte('price', filters.maxPrice);
-      if (filters.featured) query = query.eq('is_featured', true);
-
-      switch (filters.sort) {
-        case 'popular':
-          query = query.order('sales_count', { ascending: false });
-          break;
-        case 'price_asc':
-          query = query.order('price', { ascending: true });
-          break;
-        case 'price_desc':
-          query = query.order('price', { ascending: false });
-          break;
-        default:
-          query = query.order('created_at', { ascending: false });
+      if (filters?.difficulty && filters.difficulty !== 'all') {
+        q = q.eq('difficulty', filters.difficulty);
       }
-
-      if (filters.limit) query = query.limit(filters.limit);
-
-      const { data, error } = await query;
+      if (filters?.search) {
+        q = q.or(`title.ilike.%${filters.search}%,short_description.ilike.%${filters.search}%`);
+      }
+      switch (filters?.sort) {
+        case 'price-low': q = q.order('price', { ascending: true }); break;
+        case 'price-high': q = q.order('price', { ascending: false }); break;
+        case 'popular': q = q.order('sales_count', { ascending: false }); break;
+        case 'rating': q = q.order('rating', { ascending: false }); break;
+        default: q = q.order('created_at', { ascending: false });
+      }
+      const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as Project[];
     },
-    staleTime: 1000 * 60 * 5,
-  });
-}
-
-export function useProject(slug: string) {
-  return useQuery<Project | null>({
-    queryKey: ['project', slug],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*, category:categories(*)')
-        .eq('slug', slug)
-        .maybeSingle();
-      if (error) throw error;
-      return (data as Project) ?? null;
-    },
-    enabled: Boolean(slug),
-    staleTime: 1000 * 60 * 5,
   });
 }
 
 export function useFeaturedProjects(limit = 6) {
-  return useQuery<Project[]>({
-    queryKey: ['projects', { featured: true, limit }],
+  return useQuery({
+    queryKey: ['projects', 'featured', limit],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('projects')
@@ -96,20 +47,49 @@ export function useFeaturedProjects(limit = 6) {
       if (error) throw error;
       return (data ?? []) as Project[];
     },
-    staleTime: 1000 * 60 * 5,
   });
 }
 
-export function useAllTechnologies() {
-  return useQuery<string[]>({
-    queryKey: ['technologies'],
+export function useProject(slug: string) {
+  return useQuery({
+    queryKey: ['project', slug],
     queryFn: async () => {
-      const { data, error } = await supabase.from('projects').select('tech_stack');
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*, category:categories(*)')
+        .eq('slug', slug)
+        .maybeSingle();
       if (error) throw error;
-      const set = new Set<string>();
-      (data ?? []).forEach((row) => (row.tech_stack as string[] | null)?.forEach((t) => set.add(t)));
-      return Array.from(set).sort();
+      return data as Project | null;
+    },
+    enabled: Boolean(slug),
+  });
+}
+
+export function useCategories() {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('categories').select('*').order('name');
+      if (error) throw error;
+      return (data ?? []) as Category[];
     },
     staleTime: 1000 * 60 * 10,
+  });
+}
+
+export function useReviews(projectId: string) {
+  return useQuery({
+    queryKey: ['reviews', projectId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('project_id', projectId)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as Review[];
+    },
+    enabled: Boolean(projectId),
   });
 }

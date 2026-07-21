@@ -20,12 +20,7 @@ export default function AuthCallback() {
 
     async function handleCallback() {
       try {
-        // detectSessionInUrl is true on the client, so exchangeCodeForSession
-        // is triggered automatically by getSession. We call it explicitly to
-        // surface any OAuth error (e.g. access_denied from Google consent).
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(
-          window.location.href,
-        );
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(window.location.href);
         if (exchangeError) throw exchangeError;
 
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -35,19 +30,10 @@ export default function AuthCallback() {
         if (cancelled) return;
         setStatus('loading_profile');
 
-        // Poll for the profile row — the handle_new_user trigger creates it
-        // asynchronously on the SIGNED_IN event, so it may not exist yet.
         let role: Role = 'user';
         for (let attempt = 0; attempt < 10; attempt++) {
-          const { data } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .maybeSingle();
-          if (data) {
-            role = (data.role as Role) ?? 'user';
-            break;
-          }
+          const { data } = await supabase.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+          if (data) { role = (data.role as Role) ?? 'user'; break; }
           await new Promise((r) => setTimeout(r, 250));
         }
 
@@ -59,17 +45,13 @@ export default function AuthCallback() {
         const msg = err instanceof Error ? err.message : 'Google sign-in failed.';
         setErrorMsg(msg);
         setStatus('error');
-        // Clean up any partial session so the user can retry cleanly.
         await supabase.auth.signOut();
         setTimeout(() => navigate('/login', { replace: true }), 2200);
       }
     }
 
     handleCallback();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [navigate]);
 
   return (
@@ -78,7 +60,6 @@ export default function AuthCallback() {
       <div className="w-full max-w-md px-4">
         <div className="card p-10 text-center">
           <Logo className="justify-center" showText={false} />
-
           {status === 'error' ? (
             <div className="mt-8 space-y-3">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-error-50 text-error-500 dark:bg-error-500/15">
@@ -91,19 +72,11 @@ export default function AuthCallback() {
           ) : (
             <div className="mt-8 space-y-3">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
-                {status === 'redirecting' ? (
-                  <ShieldCheck size={28} />
-                ) : (
-                  <Loader2 size={28} className="animate-spin" />
-                )}
+                {status === 'redirecting' ? <ShieldCheck size={28} /> : <Loader2 size={28} className="animate-spin" />}
               </div>
-              <h1 className="font-display text-xl font-bold">
-                {status === 'redirecting' ? 'Success!' : 'Completing sign-in…'}
-              </h1>
+              <h1 className="font-display text-xl font-bold">{status === 'redirecting' ? 'Success!' : 'Completing sign-in…'}</h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                {status === 'redirecting'
-                  ? 'Taking you to your dashboard.'
-                  : 'Securely connecting your Google account.'}
+                {status === 'redirecting' ? 'Taking you to your dashboard.' : 'Securely connecting your Google account.'}
               </p>
             </div>
           )}

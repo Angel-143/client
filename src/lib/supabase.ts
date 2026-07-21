@@ -1,14 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-const url = import.meta.env.VITE_SUPABASE_URL as string;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!url || !anonKey) {
-  // eslint-disable-next-line no-console
-  console.warn('Supabase env vars missing — check .env');
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase env vars. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env');
 }
 
-export const supabase = createClient(url, anonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -57,26 +56,7 @@ export type Project = {
   is_featured: boolean;
   last_updated: string;
   created_at: string;
-  category?: Category | null;
-};
-
-export type Favorite = {
-  id: string;
-  user_id: string;
-  project_id: string;
-  created_at: string;
-  project?: Project;
-};
-
-export type Order = {
-  id: string;
-  user_id: string;
-  project_id: string;
-  amount: number;
-  status: 'pending' | 'completed' | 'refunded' | 'failed';
-  transaction_id: string | null;
-  created_at: string;
-  project?: Project;
+  category?: Category;
 };
 
 export type Review = {
@@ -88,6 +68,23 @@ export type Review = {
   created_at: string;
 };
 
+export type Favorite = {
+  id: string;
+  user_id: string;
+  project_id: string;
+  created_at: string;
+};
+
+export type Order = {
+  id: string;
+  user_id: string;
+  project_id: string;
+  amount: number;
+  status: 'pending' | 'completed' | 'refunded' | 'failed';
+  transaction_id: string | null;
+  created_at: string;
+};
+
 export type ContactMessage = {
   id: string;
   name: string;
@@ -96,4 +93,33 @@ export type ContactMessage = {
   message: string;
   status: 'new' | 'read' | 'archived';
   created_at: string;
+};
+
+export type TeamMember = {
+  id: string;
+  profile_id: string | null;
+  full_name: string;
+  designation: string | null;
+  bio: string | null;
+  skills: string[];
+  avatar_url: string | null;
+  social_links: Record<string, string>;
+  display_order: number;
+  is_active: boolean;
+};
+
+export type Job = {
+  id: string;
+  title: string;
+  slug: string;
+  department: string | null;
+  location: string | null;
+  employment_type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+  description: string | null;
+  requirements: string[];
+  salary_range: string | null;
+  status: 'active' | 'closed';
+  posted_by: string | null;
+  created_at: string;
+  updated_at: string;
 };

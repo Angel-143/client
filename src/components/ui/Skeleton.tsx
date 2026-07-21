@@ -9,22 +9,11 @@ export function ProjectCardSkeleton() {
     <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white dark:border-slate-800/60 dark:bg-[#1E293B]">
       <Skeleton className="aspect-[16/10] w-full rounded-none" />
       <div className="space-y-3 p-5">
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-5 w-20 rounded-full" />
-          <Skeleton className="h-3 w-20" />
-        </div>
+        <Skeleton className="h-5 w-20 rounded-full" />
         <Skeleton className="h-5 w-3/4" />
         <Skeleton className="h-3 w-full" />
         <Skeleton className="h-3 w-5/6" />
-        <div className="flex gap-1.5">
-          <Skeleton className="h-5 w-12 rounded-md" />
-          <Skeleton className="h-5 w-12 rounded-md" />
-          <Skeleton className="h-5 w-12 rounded-md" />
-        </div>
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-9 w-20 rounded-lg" />
-        </div>
+        <Skeleton className="h-9 w-20 rounded-lg" />
       </div>
     </div>
   );
