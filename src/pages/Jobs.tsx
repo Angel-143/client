@@ -21,35 +21,24 @@ export default function Jobs() {
           </motion.div>
         </div>
       </section>
-
       <section className="section">
         <div className="container-page">
           {isLoading ? (
-            <div className="space-y-4">
-              {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)}
-            </div>
+            <div className="space-y-4">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)}</div>
           ) : activeJobs.length > 0 ? (
-            <div className="space-y-4">
-              {activeJobs.map((job, i) => (
-                <motion.div key={job.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: i * 0.05 }}
-                  className="card-hover group flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white">{job.title}</h3>
-                      <Badge variant="brand">{job.employment_type}</Badge>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-                      {job.department && <span className="flex items-center gap-1.5"><Building2 size={14} /> {job.department}</span>}
-                      {job.location && <span className="flex items-center gap-1.5"><MapPin size={14} /> {job.location}</span>}
-                      {job.salary_range && <span className="flex items-center gap-1.5"><Clock size={14} /> {job.salary_range}</span>}
-                    </div>
+            <div className="space-y-4">{activeJobs.map((job, i) => (
+              <motion.div key={job.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: i * 0.05 }} className="card-hover group flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2"><h3 className="font-display text-lg font-bold text-slate-900 dark:text-white">{job.title}</h3><Badge variant="brand">{job.employment_type}</Badge></div>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    {job.department && <span className="flex items-center gap-1.5"><Building2 size={14} /> {job.department}</span>}
+                    {job.location && <span className="flex items-center gap-1.5"><MapPin size={14} /> {job.location}</span>}
+                    {job.salary_range && <span className="flex items-center gap-1.5"><Clock size={14} /> {job.salary_range}</span>}
                   </div>
-                  <a href={`mailto:careers@myclientwork.dev?subject=Application: ${encodeURIComponent(job.title)}`} className="btn-primary shrink-0">
-                    Apply <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-                  </a>
-                </motion.div>
-              ))}
-            </div>
+                </div>
+                <a href={`mailto:careers@myclientwork.dev?subject=Application: ${encodeURIComponent(job.title)}`} className="btn-primary shrink-0">Apply <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5" /></a>
+              </motion.div>
+            ))}</div>
           ) : (
             <EmptyState icon={Briefcase} title="No open positions right now" description="We don't have any active job openings at the moment. Check back soon or send us your resume." action={<a href="mailto:careers@myclientwork.dev" className="btn-primary mt-4">Send your resume</a>} />
           )}

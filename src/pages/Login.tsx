@@ -25,13 +25,11 @@ export default function Login() {
   async function onSubmit(data: FormData) {
     const { error } = await signIn(data.email, data.password);
     if (error) { toast.error(error); return; }
-    toast.success('Welcome back!');
-    navigate('/dashboard');
+    toast.success('Welcome back!'); navigate('/dashboard');
   }
 
   async function handleGoogle() {
-    setGoogleLoading(true);
-    toast.loading('Redirecting to Google…', { id: 'google' });
+    setGoogleLoading(true); toast.loading('Redirecting to Google…', { id: 'google' });
     const { error } = await signInWithGoogle();
     if (error) { toast.error(error, { id: 'google' }); setGoogleLoading(false); }
   }
@@ -44,7 +42,6 @@ export default function Login() {
         <div className="card p-8">
           <h1 className="font-display text-2xl font-bold text-center">Welcome back</h1>
           <p className="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">Sign in to your account</p>
-
           <div className="mt-6 space-y-4">
             <button type="button" onClick={handleGoogle} disabled={googleLoading} className="btn-secondary w-full">
               {googleLoading ? <Loader2 size={16} className="animate-spin" /> : (
@@ -57,46 +54,15 @@ export default function Login() {
               )}
               {googleLoading ? 'Redirecting…' : 'Continue with Google'}
             </button>
-
-            <div className="relative flex items-center gap-3">
-              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-              <span className="text-xs font-medium text-slate-400">or</span>
-              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-            </div>
-
+            <div className="relative flex items-center gap-3"><div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" /><span className="text-xs font-medium text-slate-400">or</span><div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" /></div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div>
-                <label className="label" htmlFor="email">Email</label>
-                <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input id="email" type="email" className="input pl-10" placeholder="you@example.com" {...register('email')} />
-                </div>
-                {errors.email && <p className="mt-1 text-xs text-error-600">{errors.email.message}</p>}
-              </div>
-              <div>
-                <label className="label" htmlFor="password">Password</label>
-                <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input id="password" type={showPassword ? 'text' : 'password'} className="input pl-10 pr-10" placeholder="••••••••" {...register('password')} />
-                  <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                {errors.password && <p className="mt-1 text-xs text-error-600">{errors.password.message}</p>}
-              </div>
-              <div className="flex justify-end">
-                <Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Forgot password?</Link>
-              </div>
-              <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-3">
-                {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <LogIn size={18} />}
-                {isSubmitting ? 'Signing in...' : 'Sign In'}
-              </button>
+              <div><label className="label" htmlFor="email">Email</label><div className="relative"><Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input id="email" type="email" className="input pl-10" placeholder="you@example.com" {...register('email')} /></div>{errors.email && <p className="mt-1 text-xs text-error-600">{errors.email.message}</p>}</div>
+              <div><label className="label" htmlFor="password">Password</label><div className="relative"><Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input id="password" type={showPassword ? 'text' : 'password'} className="input pl-10 pr-10" placeholder="••••••••" {...register('password')} /><button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div>{errors.password && <p className="mt-1 text-xs text-error-600">{errors.password.message}</p>}</div>
+              <div className="flex justify-end"><Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Forgot password?</Link></div>
+              <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-3">{isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <LogIn size={18} />}{isSubmitting ? 'Signing in...' : 'Sign In'}</button>
             </form>
           </div>
-
-          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-            Don't have an account? <Link to="/register" className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Register</Link>
-          </p>
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">Don't have an account? <Link to="/register" className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">Register</Link></p>
         </div>
       </div>
     </div>
