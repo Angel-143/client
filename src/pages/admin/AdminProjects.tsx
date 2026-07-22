@@ -32,10 +32,10 @@ export default function AdminProjects() {
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {isLoading ? <tr><td colSpan={5} className="p-8 text-center text-gray-400">Loading...</td></tr> : projects?.map(p => (
               <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                <td className="px-4 py-3"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex-shrink-0 overflow-hidden">{p.thumbnail_url && <img src={p.thumbnail_url} alt="" className="w-full h-full object-cover" />}</div><div><p className="font-medium text-gray-900 dark:text-white">{p.title}</p>{p.is_featured && <Badge color="amber" className="mt-0.5">Featured</Badge>}</div></div></td>
+                <td className="px-4 py-3"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex-shrink-0 overflow-hidden">{p.thumbnail_url && <img src={p.thumbnail_url} alt="" className="w-full h-full object-cover" />}</div><div><p className="font-medium text-gray-900 dark:text-white">{p.title}</p>{p.is_featured && <Badge color="accent" className="mt-0.5">Featured</Badge>}</div></div></td>
                 <td className="px-4 py-3 text-gray-700 dark:text-gray-300 hidden sm:table-cell">{formatPrice(p.price)}</td>
                 <td className="px-4 py-3 text-gray-700 dark:text-gray-300 hidden md:table-cell">{formatNumber(p.sales_count)}</td>
-                <td className="px-4 py-3 hidden md:table-cell"><span className="inline-flex items-center gap-1 text-gray-700 dark:text-gray-300"><Star size={12} className="fill-amber-400 text-amber-400" />{p.rating.toFixed(1)}</span></td>
+                <td className="px-4 py-3 hidden md:table-cell"><span className="inline-flex items-center gap-1 text-gray-700 dark:text-gray-300"><Star size={12} className="fill-accent-400 text-accent-400" />{p.rating.toFixed(1)}</span></td>
                 <td className="px-4 py-3"><div className="flex items-center justify-end gap-1"><button className="p-2 text-gray-400 hover:text-brand-600"><Pencil size={16} /></button><button onClick={() => handleDelete(p.id)} className="p-2 text-gray-400 hover:text-red-600"><Trash2 size={16} /></button></div></td>
               </tr>
             ))}

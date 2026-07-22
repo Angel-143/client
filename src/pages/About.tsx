@@ -6,7 +6,7 @@ import { SITE } from '../lib/constants'
 const teamMembers = [
   { name: 'Aslok Singh Rajput', designation: 'Full-Stack Developer & Founder', bio: 'Building scalable web applications with React, Node.js and cloud infrastructure. Passionate about clean code and developer experience.', skills: ['React','TypeScript','Node.js','Supabase','AWS','Docker'], gradient: 'from-brand-500 via-brand-600 to-blue-700', social: { github: '#', linkedin: '#', email: '#' } },
   { name: 'Bikash Kushwaha', designation: 'Backend Engineer', bio: 'Database architect and API specialist. Loves designing systems that scale gracefully and perform under pressure.', skills: ['PostgreSQL','Node.js','Python','Redis','GraphQL','Kubernetes'], gradient: 'from-emerald-500 via-teal-600 to-cyan-700', social: { github: '#', linkedin: '#', email: '#' } },
-  { name: 'Sandip Kumar Sah', designation: 'Frontend & UI Engineer', bio: 'Turning designs into pixel-perfect, accessible interfaces. Obsessed with animations, micro-interactions, and user delight.', skills: ['React','Tailwind CSS','Framer Motion','Figma','Next.js','Vite'], gradient: 'from-amber-500 via-orange-600 to-red-600', social: { github: '#', linkedin: '#', email: '#' } },
+  { name: 'Sandip Kumar Sah', designation: 'Frontend & UI Engineer', bio: 'Turning designs into pixel-perfect, accessible interfaces. Obsessed with animations, micro-interactions, and user delight.', skills: ['React','Tailwind CSS','Framer Motion','Figma','Next.js','Vite'], gradient: 'from-accent-500 via-accent-600 to-orange-600', social: { github: '#', linkedin: '#', email: '#' } },
 ]
 const values = [
   { icon: Code2, title: 'Quality First', desc: 'Every line of code is reviewed, tested, and documented to meet production standards.' },
@@ -29,7 +29,7 @@ export default function About() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Badge color="brand" className="mb-5">About Us</Badge>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">We help developers <span className="bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">ship faster</span></h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">We help developers <span className="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">ship faster</span></h1>
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">{SITE.name} is a premium source code marketplace based in {SITE.location}. We build production-ready projects so you can focus on what matters — launching your product.</p>
           </motion.div>
         </div>
@@ -52,7 +52,7 @@ export default function About() {
 
       <section className="py-20 bg-gray-50/50 dark:bg-gray-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12"><Badge color="amber" className="mb-3">Our Journey</Badge><h2 className="text-3xl font-bold text-gray-900 dark:text-white">How we got here</h2></div>
+          <div className="text-center mb-12"><Badge color="accent" className="mb-3">Our Journey</Badge><h2 className="text-3xl font-bold text-gray-900 dark:text-white">How we got here</h2></div>
           <div className="relative max-w-3xl mx-auto">
             <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 -translate-x-1/2" />
             {timeline.map((item, i) => (

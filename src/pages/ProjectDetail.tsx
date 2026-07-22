@@ -26,7 +26,7 @@ export default function ProjectDetail() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="aspect-video rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-950 overflow-hidden mb-6 flex items-center justify-center">{project.thumbnail_url ? <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover" /> : <Zap className="w-16 h-16 text-gray-300 dark:text-gray-700" />}</div>
-            <div className="flex flex-wrap gap-2 mb-4">{category && <Badge color="brand">{category.name}</Badge>}<Badge color={difficultyColors[project.difficulty] || 'gray'}>{project.difficulty}</Badge>{project.is_featured && <Badge color="amber">Featured</Badge>}</div>
+            <div className="flex flex-wrap gap-2 mb-4">{category && <Badge color="brand">{category.name}</Badge>}<Badge color={difficultyColors[project.difficulty] || 'gray'}>{project.difficulty}</Badge>{project.is_featured && <Badge color="accent">Featured</Badge>}</div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{project.title}</h1>
             <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">{project.short_description}</p>
             {project.description && <div className="mt-6"><p className="text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">{project.description}</p></div>}
@@ -37,7 +37,7 @@ export default function ProjectDetail() {
             <div className="sticky top-24 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
               <div className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(project.price)}</div>
               <div className="mt-4 space-y-3 text-sm">
-                <div className="flex items-center justify-between"><span className="text-gray-500 dark:text-gray-400">Rating</span><div className="flex items-center gap-1"><Star size={14} className="fill-amber-400 text-amber-400" /><span className="font-medium text-gray-900 dark:text-white">{project.rating.toFixed(1)}</span></div></div>
+                <div className="flex items-center justify-between"><span className="text-gray-500 dark:text-gray-400">Rating</span><div className="flex items-center gap-1"><Star size={14} className="fill-accent-400 text-accent-400" /><span className="font-medium text-gray-900 dark:text-white">{project.rating.toFixed(1)}</span></div></div>
                 <div className="flex items-center justify-between"><span className="text-gray-500 dark:text-gray-400">Sales</span><span className="font-medium text-gray-900 dark:text-white">{formatNumber(project.sales_count)}</span></div>
                 <div className="flex items-center justify-between"><span className="text-gray-500 dark:text-gray-400">Updated</span><span className="font-medium text-gray-900 dark:text-white">{formatDate(project.last_updated)}</span></div>
               </div>

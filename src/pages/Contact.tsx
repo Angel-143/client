@@ -17,7 +17,7 @@ type FormData = z.infer<typeof schema>
 const infoCards = [
   { icon: Mail, title: 'Email Us', value: SITE.email, sub: 'We reply within 24 hours', gradient: 'from-brand-500 to-brand-700' },
   { icon: MapPin, title: 'Location', value: SITE.location, sub: 'Available worldwide', gradient: 'from-emerald-500 to-teal-700' },
-  { icon: Headphones, title: 'Support', value: '24/7 Online', sub: 'Always here to help', gradient: 'from-amber-500 to-orange-700' },
+  { icon: Headphones, title: 'Support', value: '24/7 Online', sub: 'Always here to help', gradient: 'from-accent-500 to-accent-700' },
 ]
 
 export default function Contact() {
@@ -37,7 +37,7 @@ export default function Contact() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Badge color="brand" className="mb-5">Contact</Badge>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">Let's talk about your <span className="bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">project</span></h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">Let's talk about your <span className="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">project</span></h1>
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">Have a question or need a custom project? We're here to help. Reach out and we'll get back to you within 24 hours.</p>
           </motion.div>
         </div>
@@ -78,7 +78,7 @@ export default function Contact() {
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-4">
               <div className="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-accent-400/20 rounded-full blur-2xl" />
                 <Clock size={28} className="mb-3" /><h3 className="font-bold text-lg">Response Time</h3><p className="text-brand-100 text-sm mt-1">We typically respond within 24 hours during business days.</p>
               </div>
               <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">

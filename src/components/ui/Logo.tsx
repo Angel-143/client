@@ -15,7 +15,7 @@ export default function Logo({ className, showText = true, textClassName, size =
       />
       {showText && (
         <span className={cn('font-extrabold tracking-tight text-gray-900 dark:text-white', textSizes[size], textClassName)}>
-          Myclient<span className="text-brand-600">work</span>
+          Myclient<span className="text-brand-600 dark:text-brand-400">work</span>
         </span>
       )}
     </Link>

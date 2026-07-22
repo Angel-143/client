@@ -29,14 +29,14 @@ export default function Home() {
       <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/50 via-white to-white dark:from-brand-950/20 dark:via-gray-950 dark:to-gray-950">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-200/30 dark:bg-brand-900/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-200/20 dark:bg-blue-900/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 dark:bg-accent-900/10 rounded-full blur-3xl" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <Badge color="brand" className="mb-5 px-3 py-1"><Sparkles size={12} /> Premium Source Code Marketplace</Badge>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white leading-[1.1]">
-                Ship faster with <span className="bg-gradient-to-r from-brand-600 to-blue-500 bg-clip-text text-transparent">production-ready</span> code
+                Ship faster with <span className="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">production-ready</span> code
               </h1>
               <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed">Buy premium, battle-tested source code projects. React, Next.js, Node.js and more — with instant download and lifetime updates.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -48,7 +48,7 @@ export default function Home() {
                   {['A','B','S','R','K'].map((l, i) => <div key={i} className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-950 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-xs font-bold">{l}</div>)}
                 </div>
                 <div className="text-sm">
-                  <div className="flex items-center gap-1">{[1,2,3,4,5].map(s => <Star key={s} size={14} className="fill-amber-400 text-amber-400" />)}</div>
+                  <div className="flex items-center gap-1">{[1,2,3,4,5].map(s => <Star key={s} size={14} className="fill-accent-400 text-accent-400" />)}</div>
                   <p className="text-gray-500 dark:text-gray-400 mt-0.5">Trusted by 3,200+ developers</p>
                 </div>
               </div>
@@ -56,7 +56,7 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }} className="relative">
               <div className="relative rounded-2xl bg-gray-900 dark:bg-black shadow-2xl overflow-hidden border border-gray-800">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-800 bg-gray-900/50">
-                  <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500" /><div className="w-3 h-3 rounded-full bg-amber-500" /><div className="w-3 h-3 rounded-full bg-green-500" /></div>
+                  <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500" /><div className="w-3 h-3 rounded-full bg-accent-500" /><div className="w-3 h-3 rounded-full bg-green-500" /></div>
                   <span className="text-xs text-gray-500 ml-2 font-mono">myclientwork — terminal</span>
                 </div>
                 <div className="p-6 font-mono text-sm">
@@ -64,8 +64,8 @@ export default function Home() {
                     <div className="flex gap-3"><span className="text-green-400">$</span><span className="text-gray-300">npm install myclientwork</span></div>
                     <div className="text-gray-600 text-xs">added 247 packages in 3.2s</div>
                     <div className="flex gap-3 pt-2"><span className="text-green-400">$</span><span className="text-gray-300">npm run dev</span></div>
-                    <div className="text-blue-400 text-xs pt-1">▸ VITE v6.0 ready in 210 ms</div>
-                    <div className="text-blue-400 text-xs">▸ ➜ Local: http://localhost:5173/</div>
+                    <div className="text-brand-400 text-xs pt-1">▸ VITE v6.0 ready in 210 ms</div>
+                    <div className="text-brand-400 text-xs">▸ ➜ Local: http://localhost:5173/</div>
                     <div className="text-green-400 text-xs pt-2">✓ Build successful</div>
                     <div className="flex gap-3 pt-2"><span className="text-green-400">$</span><span className="text-gray-300">deploy --production</span></div>
                     <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1, repeat: Infinity }} className="w-2 h-4 bg-green-400 inline-block ml-3" />
@@ -77,7 +77,7 @@ export default function Home() {
                 <div><p className="text-xs font-bold text-gray-900 dark:text-white">Instant download</p><p className="text-[10px] text-gray-500">After purchase</p></div>
               </motion.div>
               <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-3 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center"><RefreshCw size={16} className="text-amber-600 dark:text-amber-400" /></div>
+                <div className="w-8 h-8 rounded-lg bg-accent-100 dark:bg-accent-900/30 flex items-center justify-center"><RefreshCw size={16} className="text-accent-600 dark:text-accent-400" /></div>
                 <div><p className="text-xs font-bold text-gray-900 dark:text-white">Lifetime updates</p><p className="text-[10px] text-gray-500">Always current</p></div>
               </motion.div>
             </motion.div>
@@ -103,7 +103,7 @@ export default function Home() {
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10">
-              <div><Badge color="amber" className="mb-3">Featured</Badge><h2 className="text-3xl font-bold text-gray-900 dark:text-white">Popular Projects</h2><p className="text-gray-500 dark:text-gray-400 mt-2">Most loved by the community</p></div>
+              <div><Badge color="accent" className="mb-3">Featured</Badge><h2 className="text-3xl font-bold text-gray-900 dark:text-white">Popular Projects</h2><p className="text-gray-500 dark:text-gray-400 mt-2">Most loved by the community</p></div>
               <Link to="/projects" className="hidden sm:flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400 hover:gap-2 transition-all">View all <ArrowRight size={16} /></Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{featuredProjects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}</div>
@@ -155,7 +155,7 @@ export default function Home() {
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl bg-gradient-to-br from-brand-600 to-brand-800 p-10 lg:p-16 text-center overflow-hidden">
-            <div className="absolute inset-0 -z-10"><div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" /><div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" /></div>
+            <div className="absolute inset-0 -z-10"><div className="absolute top-0 right-0 w-72 h-72 bg-accent-400/20 rounded-full blur-3xl" /><div className="absolute bottom-0 left-0 w-72 h-72 bg-brand-400/10 rounded-full blur-3xl" /></div>
             <h2 className="text-3xl lg:text-4xl font-bold text-white">Ready to build something great?</h2>
             <p className="mt-4 text-brand-100 text-lg max-w-xl mx-auto">Join thousands of developers shipping faster with our premium source code.</p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">

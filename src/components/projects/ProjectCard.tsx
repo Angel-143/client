@@ -13,10 +13,10 @@ export default function ProjectCard({ project, index = 0 }: { project: Project; 
       <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-950 overflow-hidden">
         {project.thumbnail_url ? <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /> : <div className="w-full h-full flex items-center justify-center"><Zap className="w-12 h-12 text-gray-300 dark:text-gray-700" /></div>}
         <div className="absolute top-3 left-3 flex gap-2">
-          {project.is_featured && <Badge color="amber">Featured</Badge>}
+          {project.is_featured && <Badge color="accent">Featured</Badge>}
           <Badge color={difficultyColors[project.difficulty] || 'gray'}>{project.difficulty}</Badge>
         </div>
-        <div className="absolute top-3 right-3"><div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-full px-2.5 py-1 flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" /><span className="text-xs font-semibold text-gray-900 dark:text-white">{project.rating.toFixed(1)}</span></div></div>
+        <div className="absolute top-3 right-3"><div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-full px-2.5 py-1 flex items-center gap-1"><Star size={12} className="fill-accent-400 text-accent-400" /><span className="text-xs font-semibold text-gray-900 dark:text-white">{project.rating.toFixed(1)}</span></div></div>
       </div>
       <div className="p-5">
         <h3 className="font-semibold text-gray-900 dark:text-white text-base mb-1 line-clamp-1">{project.title}</h3>

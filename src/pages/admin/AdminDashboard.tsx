@@ -44,10 +44,10 @@ export default function AdminDashboard() {
   })
 
   const cards = [
-    { label: 'Total Projects', value: stats?.projectCount ?? '—', sub: `${stats?.featuredCount ?? 0} featured`, icon: FolderKanban, color: 'from-brand-500 to-brand-700', bg: 'bg-brand-50 dark:bg-brand-900/20', text: 'text-brand-600 dark:text-brand-400' },
-    { label: 'Revenue', value: stats ? formatPrice(stats.revenue) : '—', sub: `${stats?.orderCount ?? 0} orders`, icon: DollarSign, color: 'from-green-500 to-emerald-700', bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
-    { label: 'Messages', value: stats?.messageCount ?? '—', sub: `${stats?.newMessages ?? 0} new`, icon: MessageSquare, color: 'from-purple-500 to-violet-700', bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
-    { label: 'Users', value: stats?.userCount ?? '—', sub: 'Registered', icon: Users, color: 'from-amber-500 to-orange-700', bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400' },
+    { label: 'Total Projects', value: stats?.projectCount ?? '—', sub: `${stats?.featuredCount ?? 0} featured`, icon: FolderKanban, bg: 'bg-brand-50 dark:bg-brand-900/20', text: 'text-brand-600 dark:text-brand-400' },
+    { label: 'Revenue', value: stats ? formatPrice(stats.revenue) : '—', sub: `${stats?.orderCount ?? 0} orders`, icon: DollarSign, bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
+    { label: 'Messages', value: stats?.messageCount ?? '—', sub: `${stats?.newMessages ?? 0} new`, icon: MessageSquare, bg: 'bg-accent-50 dark:bg-accent-900/20', text: 'text-accent-600 dark:text-accent-400' },
+    { label: 'Users', value: stats?.userCount ?? '—', sub: 'Registered', icon: Users, bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
   ]
 
   return (
@@ -58,9 +58,9 @@ export default function AdminDashboard() {
       </div>
 
       {stats && stats.newMessages > 0 && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex items-center justify-between">
-          <p className="text-sm text-amber-800 dark:text-amber-200">You have {stats.newMessages} new message{stats.newMessages > 1 ? 's' : ''} to review.</p>
-          <Link to="/admin/pages" className="text-sm font-medium text-amber-800 dark:text-amber-200 hover:underline flex items-center gap-1">View <ArrowUpRight size={14} /></Link>
+        <div className="bg-accent-50 dark:bg-accent-900/20 border border-accent-200 dark:border-accent-800 rounded-xl p-4 flex items-center justify-between">
+          <p className="text-sm text-accent-800 dark:text-accent-200">You have {stats.newMessages} new message{stats.newMessages > 1 ? 's' : ''} to review.</p>
+          <Link to="/admin/pages" className="text-sm font-medium text-accent-800 dark:text-accent-200 hover:underline flex items-center gap-1">View <ArrowUpRight size={14} /></Link>
         </div>
       )}
 
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">{formatPrice(p.price)}</p>
-                  <p className="text-xs text-gray-400 flex items-center gap-1 justify-end"><Star size={10} className="fill-amber-400 text-amber-400" /> {p.rating.toFixed(1)}</p>
+                  <p className="text-xs text-gray-400 flex items-center gap-1 justify-end"><Star size={10} className="fill-accent-400 text-accent-400" /> {p.rating.toFixed(1)}</p>
                 </div>
               </div>
             ))}
